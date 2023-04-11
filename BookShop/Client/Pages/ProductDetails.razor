@@ -1,23 +1,29 @@
 ﻿@page "/product/{id}"
 @inject IProductService ProductService;
 
-<div class="media">
-    <div class="media-img-big-wrapper mr-2">
-        <img class="media-img-big" src="@product?.Image" alt="@product?.Title" />
-    </div>
-    <div class="media-body">
-        <h2 class="mb-0">@product?.Title</h2>
-        <p>@product?.Description</p>        
-        @if (product?.OriginalPrice > product?.Price)
-        {
-            <h6 class="text-muted original-price">$@product.OriginalPrice</h6>
-        }
-        <h4 class="price">
-            $@product?.Price
-        </h4>
-        <button class="btn btn-primary"><i class="oi oi-cart"></i>&nbsp;&nbsp;&nbsp;Add to Cart</button>
-    </div>
 
+<div class="card mb-3 card-big">
+    <div class="row g-0">
+        <div class="col-md-4 media-img-big-wrapper">
+            <a href="/product/@product?.Id">
+                <img class="media-img-big" src="@product?.Image" alt="@product?.Title" />
+            </a>
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">               
+                <h3 class="card-title">@product?.Title</h3><br/>               
+                <p class="card-text">@product?.Description</p>
+                @if (product?.OriginalPrice > product?.Price)
+                {
+                    <h6 class="text-muted original-price">$@product.OriginalPrice</h6>
+                }
+                <h5 class="price">
+                    $@product?.Price
+                </h5><br/>
+                <button class="btn btn-primary"><i class="oi oi-cart"></i>&nbsp;&nbsp;&nbsp;Add to Cart</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {
