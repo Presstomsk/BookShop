@@ -1,11 +1,12 @@
 ﻿@page "/"
 @page "/{categoryurl}"
 @inject ICategoryService CategoryService;
+@inject IProductService ProductService;
 
 @if (category != null)
 {
     <h1>Welcome to the @category.Name section!</h1>
-    <ProductList CategoryId="@category.Id"/>
+    <ProductList/>
 }
 else
 {
@@ -19,9 +20,11 @@ else
     [Parameter]
     public string? CategoryUrl { get; set; }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        category = CategoryUrl != null ? CategoryService.Categories.FirstOrDefault(c => c.Url != null
+        await ProductService.LoadProductsAsync(CategoryUrl);
+
+        category = CategoryUrl != null ? CategoryService?.Categories?.FirstOrDefault(c => c.Url != null
                                                                     ? c.Url.ToLower().Equals(CategoryUrl.ToLower())
                                                                     : false) 
                                                                     : null;

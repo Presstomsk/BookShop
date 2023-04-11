@@ -4,7 +4,9 @@ namespace BookShop.Client.Services.ProductService
 {
     public interface IProductService
     {
-        List<Product> Products { get; set; }
-        void LoadProducts();
+        event Action? OnChange;
+        List<Product>? Products { get; set; }
+        Task LoadProductsAsync(string? categoryUrl = null);
+        Task<Product?> GetProductAsync(int id);
     }
 }

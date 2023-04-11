@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.ResponseCompression;
+using BookShop.Server.Services.CategoryService;
+using BookShop.Server.Services.ProductService;
 
 namespace BookShop
 {
@@ -12,6 +13,8 @@ namespace BookShop
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             var app = builder.Build();
 

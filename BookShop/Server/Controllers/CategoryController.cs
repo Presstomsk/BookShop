@@ -1,8 +1,6 @@
-﻿using BookShop.Client.Services.CategoryService;
+﻿using BookShop.Server.Services.CategoryService;
 using BookShop.Shared;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
 namespace BookShop.Server.Controllers
 {   
@@ -10,24 +8,17 @@ namespace BookShop.Server.Controllers
     [Route("[controller]")]
     public class CategoryController : ControllerBase
     {
-       
-        public CategoryController()
-        {            
+        private readonly ICategoryService _categoryService;
+
+        public CategoryController(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Category>>> GetAsync()
+        public async Task<ActionResult<List<Category>>> GetCategoriesAsync()
         {
-            return Ok(new List<Category>
-            {
-                new Category
-                {
-                    Id = 1,
-                    Name = "Books",
-                    Url = "books",
-                    Icon = "book"
-                }
-            });
-        }
+            return Ok(await _categoryService.GetCategoriesAsync());
+        }        
     }
 }
