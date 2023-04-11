@@ -4,7 +4,7 @@ namespace BookShop.Client.Services.CategoryService
 {
     public interface ICategoryService
     {
-        List<Category> Categories { get; set; }
-        void LoadCategories();
+        List<Category>? Categories { get; set; }
+        Task LoadCategoriesAsync();
     }
 }

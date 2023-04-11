@@ -15,14 +15,14 @@
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
-        </div>
+        </div> 
         <div class="dropdown-divider"/>
-        @foreach (var category in CategoryService.Categories)
-        {
+        @foreach (var category in CategoryService?.Categories != null ? CategoryService.Categories : new List<Category>())
+        {            
             <div class="nav-item px-3">
-            <NavLink class="nav-link" href="@category?.Url">
-                <span class="oi oi-@category?.Icon" aria-hidden="true"></span> @category?.Name
-            </NavLink>
+                <NavLink class="nav-link" href="@category?.Url">
+                    <span class="oi oi-@category?.Icon" aria-hidden="true"></span> @category?.Name
+                </NavLink>
             </div>
         }
     </nav>
@@ -36,10 +36,10 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
-    }
+    }    
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        CategoryService.LoadCategories();
+        await CategoryService.LoadCategoriesAsync();
     }
 }

@@ -1,23 +1,22 @@
 ﻿using BookShop.Shared;
+using System.Net.Http.Json;
 
 namespace BookShop.Client.Services.CategoryService
 {
     public class CategoryService : ICategoryService
     {
-        public List<Category> Categories { get; set; } = new List<Category>();
+        private readonly HttpClient _http;
 
-        public void LoadCategories()
+        public List<Category>? Categories { get; set; } = new List<Category>();      
+
+        public CategoryService(HttpClient http)
         {
-            Categories = new List<Category>
-            {
-                new Category 
-                {
-                    Id = 1,
-                    Name = "Books",
-                    Url = "books",
-                    Icon = "book"
-                }
-            };
+            _http = http;           
+        }
+
+        public async Task LoadCategoriesAsync()
+        {
+            Categories = await _http.GetFromJsonAsync<List<Category>>("Category");
         }
     }
 }
