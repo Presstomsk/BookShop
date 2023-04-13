@@ -1,5 +1,7 @@
+using BookShop.Server.Data;
 using BookShop.Server.Services.CategoryService;
 using BookShop.Server.Services.ProductService;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookShop
 {
@@ -10,13 +12,16 @@ namespace BookShop
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddDbContext<DataContext>(options =>
+            {
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IProductService, ProductService>();
 
-            var app = builder.Build();
+            var app = builder.Build();           
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

@@ -19,7 +19,7 @@ namespace BookShop.Client.Services.ProductService
         public async Task LoadProductsAsync(string? categoryUrl = null)
         {
 
-            Products = await _http.GetFromJsonAsync<List<Product>>( categoryUrl == null 
+            Products = await _http.GetFromJsonAsync<List<Product>?>( categoryUrl == null 
                                                                   ? $"Product"
                                                                   : $"Product/Category/{categoryUrl}");            
             
@@ -28,7 +28,7 @@ namespace BookShop.Client.Services.ProductService
 
         public async Task<Product?> GetProductAsync(int id)
         {
-            return await _http.GetFromJsonAsync<Product>($"Product/{id}");
+            return await _http.GetFromJsonAsync<Product?>($"Product/{id}");
         }
     }
 }

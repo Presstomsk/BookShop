@@ -22,7 +22,7 @@ namespace BookShop.Server.Controllers
         }
 
         [HttpGet("Category/{categoryUrl}")]
-        public async Task<ActionResult<List<Product>>> GetProductsByCategoryAsync(string categoryUrl)
+        public async Task<ActionResult<List<Product>?>> GetProductsByCategoryAsync(string categoryUrl)
         {
             return Ok(await _productService.GetProductsByCategoryAsync(categoryUrl));
         }
