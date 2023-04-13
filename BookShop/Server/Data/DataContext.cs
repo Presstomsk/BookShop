@@ -7,6 +7,7 @@ namespace BookShop.Server.Data
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Edition> Editions { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -54,6 +55,25 @@ namespace BookShop.Server.Data
                     Price = 9.99m,
                     OriginalPrice = 19.99m
                 });
+
+            modelBuilder.Entity<Edition>().HasData(
+                new Edition { Id = 1, Name = "Paperback" },
+                new Edition { Id = 2, Name = "E-Book"},
+                new Edition { Id = 3, Name = "Audiobook"}
+                );
+
+            modelBuilder.SharedTypeEntity<Dictionary<string, object>>("EditionProduct")
+                .HasData(
+                new { EditionsId = 1, ProductsId = 1 },
+                new { EditionsId = 2, ProductsId = 1 },
+                new { EditionsId = 3, ProductsId = 1 },
+                new { EditionsId = 1, ProductsId = 2 },
+                new { EditionsId = 2, ProductsId = 2 },
+                new { EditionsId = 3, ProductsId = 2 },
+                new { EditionsId = 1, ProductsId = 3 },
+                new { EditionsId = 2, ProductsId = 3 },
+                new { EditionsId = 3, ProductsId = 3 }
+                );
         }
     }
 }

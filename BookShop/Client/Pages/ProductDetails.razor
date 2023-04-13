@@ -13,6 +13,17 @@
             <div class="card-body">               
                 <h3 class="card-title">@product?.Title</h3><br/>               
                 <p class="card-text">@product?.Description</p>
+                @if (product?.Editions?.Count > 0)
+                {
+                    <div class="form-group">
+                        <select class="form-control">
+                            @foreach(var edition in product.Editions)
+                            {
+                                <option>@edition.Name</option>
+                            }
+                        </select>
+                    </div><br/>
+                }
                 @if (product?.OriginalPrice > product?.Price)
                 {
                     <h6 class="text-muted original-price">$@product.OriginalPrice</h6>
