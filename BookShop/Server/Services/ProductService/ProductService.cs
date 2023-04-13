@@ -18,12 +18,12 @@ namespace BookShop.Server.Services.ProductService
 
         public async Task<List<Product>> GetAllProductsAsync()
         {
-            return await _context.Products.AsNoTracking().ToListAsync();
+            return await _context.Products.ToListAsync();
         }
 
         public async Task<Product?> GetProductAsync(int id)
         {
-            return await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);            
+            return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);            
         }
 
         public async Task<List<Product>?> GetProductsByCategoryAsync(string categoryUrl)
@@ -31,7 +31,7 @@ namespace BookShop.Server.Services.ProductService
             Category? category = await _categoryService.GetCategoryByUrlAsync(categoryUrl);
             if (category != null)
             {
-                return await _context.Products.AsNoTracking().Where(p => p.CategoryId == category.Id).ToListAsync();
+                return await _context.Products.Where(p => p.CategoryId == category.Id).ToListAsync();
             }
 
             return null;

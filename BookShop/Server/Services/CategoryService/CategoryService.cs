@@ -15,13 +15,13 @@ namespace BookShop.Server.Services.CategoryService
 
         public async Task<List<Category>> GetCategoriesAsync()
         {
-            return await _context.Categories.AsNoTracking().ToListAsync();
+            return await _context.Categories.ToListAsync();
         }
 
         public async Task<Category?> GetCategoryByUrlAsync(string categoryUrl)
         {
-            return await _context.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Url != null 
-                                                            && c.Url.ToLower().Equals(categoryUrl.ToLower()));
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Url != null 
+                                            && c.Url.ToLower().Equals(categoryUrl.ToLower()));
         }
     }
 }
