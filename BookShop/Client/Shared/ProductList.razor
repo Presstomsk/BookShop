@@ -17,12 +17,12 @@
                             <h5 class="card-title">@product.Title</h5>
                         </a>
                         <p class="card-text">@product.Description</p>
-                        @if (product.OriginalPrice > product.Price)
+                       @* @if (product.OriginalPrice > product.Price)
                         {
                             <h6 class="text-muted original-price">$@product.OriginalPrice</h6>
-                        }
+                        }*@
                         <h5 class="price">
-                            $@product.Price
+                            @GetPriceText(product)
                         </h5>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
     }
 </ul>
 
-@code { 
+@code {
 
     protected override void OnInitialized()
     {
@@ -41,5 +41,23 @@
     public void Dispose()
     {
         ProductService.OnChange -= StateHasChanged;
+    }
+
+    private string GetPriceText(Product product)
+    {
+        var variants = product.Variants;
+
+        if (variants.Count == 0)
+        {
+            return string.Empty;
+        }
+        else if (variants.Count == 1)
+        {
+            return $"{variants[0].Price} руб.";
+        }
+
+        decimal minPrice = variants.Min(v => v.Price);
+
+        return $"Минимальная цена {minPrice} руб.";
     }
 }
