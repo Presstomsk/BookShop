@@ -1,5 +1,6 @@
 ﻿@page "/{id:int}"
 @inject IProductService ProductService;
+@inject ICartService CartService;
 @inject ILocalStorageService LocalStorage;
 @inject IToastService ToastService;
 
@@ -33,7 +34,7 @@
                         $@GetSelectedVariant()!.Price
                     </h5><br/>
                 }
-                <button class="btn btn-primary" @onclick = "AddToCart"><i class="oi oi-cart"></i>&nbsp;&nbsp;&nbsp;Add to Cart</button>
+                <button class="btn btn-primary" @onclick = "AddToCartAsync"><i class="oi oi-cart"></i>&nbsp;&nbsp;&nbsp;Add to Cart</button>
             </div>
         </div>
     </div>
@@ -61,18 +62,9 @@
         return product?.Variants.FirstOrDefault(v => v.EditionId == currentEditionId);       
     }
 
-    private async Task AddToCart()
+    private async Task AddToCartAsync()
     {
-        var cart = await LocalStorage.GetItemAsync<List<ProductVariant>>("cart");
-
-        if (cart == null)
-        {
-            cart = new List<ProductVariant>();
-        }
-
-        cart.Add(GetSelectedVariant());
-        await LocalStorage.SetItemAsync("cart", cart);
-        ToastService.ShowSuccess($"Товар {product!.Title} добавлен в корзину!");
+        await CartService.AddToCartAsync(GetSelectedVariant());
     }
 }
 
