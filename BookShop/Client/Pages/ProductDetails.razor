@@ -1,13 +1,11 @@
-﻿@page "/product/{id:int}"
+﻿@page "/{id:int}"
 @inject IProductService ProductService;
 
 
 <div class="card mb-3 card-big">
     <div class="row g-0">
-        <div class="col-md-4 media-img-big-wrapper">
-            <a href="/product/@product?.Id">
-                <img class="media-img-big" src="@product?.Image" alt="@product?.Title" />
-            </a>
+        <div class="col-md-4 media-img-big-wrapper">            
+            <img class="media-img-big" src="@product?.Image" alt="@product?.Title" />           
         </div>
         <div class="col-md-8">
             <div class="card-body">               
