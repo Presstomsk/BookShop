@@ -1,0 +1,34 @@
+﻿@page "/registration"
+
+@inject ILocalStorageService LocalStorage;
+@inject NavigationManager NavigationManager;
+@inject AuthenticationStateProvider AuthStateProvider;
+
+<h3>Регистрация</h3>
+
+<EditForm Model="_user" OnSubmit="HandleRegistration">
+    <div class="form-group">
+        <label for="username">Имя пользователя</label>
+        <InputText id="username" @bind-Value="_user.Username" class="form-control"/>
+    </div><br/>
+    <div class="form-group">
+        <label for="password">Пароль</label>
+        <InputText id="password" @bind-Value="_user.Password" type="password" class="form-control" />
+    </div><br/>
+    <div class="form-group">
+        <label for="email">Электронная почта</label>
+        <InputText id="email" @bind-Value="_user.Email" type="email" class="form-control" />
+    </div><br />
+    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+</EditForm>
+
+@code {
+    private User _user = new User();
+
+    private async void HandleRegistration()
+    {
+        await LocalStorage.SetItemAsync<string>("username", _user.Username);
+        await AuthStateProvider.GetAuthenticationStateAsync();
+        NavigationManager.NavigateTo("");
+    }
+}
