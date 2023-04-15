@@ -1,6 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazored.Toast.Configuration
+@inherits LayoutComponentBase
 
-<Toast/>
+
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -13,7 +15,9 @@
 
         <article class="content px-4">
             @Body
+            <div class="blazored-toasts">
+            <BlazoredToasts ShowCloseButton = "false"/>
+            </div>
         </article>
     </main>
 </div>
-
