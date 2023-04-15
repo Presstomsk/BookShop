@@ -16,11 +16,7 @@
                         <a href="/@product.Id">
                             <h5 class="card-title">@product.Title</h5>
                         </a>
-                        <p class="card-text">@product.Description</p>
-                       @* @if (product.OriginalPrice > product.Price)
-                        {
-                            <h6 class="text-muted original-price">$@product.OriginalPrice</h6>
-                        }*@
+                        <p class="card-text">@product.Description</p>                       
                         <h5 class="price">
                             @GetPriceText(product)
                         </h5>
