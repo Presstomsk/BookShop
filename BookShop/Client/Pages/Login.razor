@@ -1,0 +1,30 @@
+﻿@page "/login"
+
+@inject ILocalStorageService LocalStorage;
+@inject NavigationManager NavigationManager;
+@inject AuthenticationStateProvider AuthStateProvider;
+
+<h3>Вход</h3>
+
+<EditForm Model="_user" OnSubmit="HandleLogin">
+    <div class="form-group">
+        <label for="username">Имя пользователя</label>
+        <InputText id="username" @bind-Value="_user.Username" class="form-control"/>
+    </div><br/>
+    <div class="form-group">
+        <label for="password">Пароль</label>
+        <InputText id="password" @bind-Value="_user.Password" type="password" class="form-control" />
+    </div><br/>
+    <button type="submit" class="btn btn-primary">Войти</button>
+</EditForm>
+
+@code {
+    private User _user = new User();
+
+    private async void HandleLogin()
+    {
+        await LocalStorage.SetItemAsync<string>("username", _user.Username);
+        await AuthStateProvider.GetAuthenticationStateAsync();
+        NavigationManager.NavigateTo("");
+    }
+}

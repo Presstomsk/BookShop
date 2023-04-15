@@ -3,6 +3,7 @@ using Blazored.Toast;
 using BookShop.Client.Services.CartService;
 using BookShop.Client.Services.CategoryService;
 using BookShop.Client.Services.ProductService;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -23,6 +24,9 @@ namespace BookShop.Client
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddBlazoredToast();
+            builder.Services.AddOptions();
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
             
 
             await builder.Build().RunAsync();
