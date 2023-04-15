@@ -6,5 +6,7 @@ namespace BookShop.Client.Services.CartService
     {
         event Action OnChange;
         Task AddToCartAsync(ProductVariant productVariant);
+        Task<List<CartItem>> GetCartItemsAsync();
+        Task DeleteCartItemAsync(CartItem item);
     }
 }
