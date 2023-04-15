@@ -1,6 +1,7 @@
 ﻿@page "/{id:int}"
 @inject IProductService ProductService;
-
+@inject ILocalStorageService LocalStorage;
+@inject IToastService ToastService;
 
 <div class="card mb-3 card-big">
     <div class="row g-0">
@@ -24,15 +25,15 @@
                 }
                 @if (GetSelectedVariant() != null )
                 {
-                    @if (GetSelectedVariant()?.OriginalPrice > GetSelectedVariant()?.Price)
+                    @if (GetSelectedVariant()!.OriginalPrice > GetSelectedVariant()!.Price)
                     {
-                        <h6 class="text-muted original-price">$@GetSelectedVariant()?.OriginalPrice</h6>
+                        <h6 class="text-muted original-price">$@GetSelectedVariant()!.OriginalPrice</h6>
                     }
                     <h5 class="price">
-                        $@GetSelectedVariant()?.Price
+                        $@GetSelectedVariant()!.Price
                     </h5><br/>
                 }
-                <button class="btn btn-primary"><i class="oi oi-cart"></i>&nbsp;&nbsp;&nbsp;Add to Cart</button>
+                <button class="btn btn-primary" @onclick = "AddToCart"><i class="oi oi-cart"></i>&nbsp;&nbsp;&nbsp;Add to Cart</button>
             </div>
         </div>
     </div>
@@ -57,7 +58,21 @@
 
     private ProductVariant? GetSelectedVariant()
     {
-        var variant = product?.Variants.FirstOrDefault(v => v.EditionId == currentEditionId);
-        return variant;
+        return product?.Variants.FirstOrDefault(v => v.EditionId == currentEditionId);       
+    }
+
+    private async Task AddToCart()
+    {
+        var cart = await LocalStorage.GetItemAsync<List<ProductVariant>>("cart");
+
+        if (cart == null)
+        {
+            cart = new List<ProductVariant>();
+        }
+
+        cart.Add(GetSelectedVariant());
+        await LocalStorage.SetItemAsync("cart", cart);
+        ToastService.ShowToast($"Товар {product!.Title} добавлен в корзину!", ToastLevel.Success);
     }
 }
+
