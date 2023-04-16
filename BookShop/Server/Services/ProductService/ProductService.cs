@@ -23,10 +23,17 @@ namespace BookShop.Server.Services.ProductService
 
         public async Task<Product?> GetProductAsync(int id)
         {
-            return await _context.Products
-                                 .Include(p => p.Variants)
-                                 .ThenInclude(v => v.Edition)
-                                 .FirstOrDefaultAsync(p => p.Id == id);            
+            var product = await _context.Products
+                               .Include(p => p.Variants)
+                               .ThenInclude(v => v.Edition)
+                               .FirstOrDefaultAsync(p => p.Id == id);
+            if (product != null)
+            {
+                product.Views++;
+                await _context.SaveChangesAsync();
+            }
+            
+            return product;
         }
 
         public async Task<List<Product>?> GetProductsByCategoryAsync(string categoryUrl)

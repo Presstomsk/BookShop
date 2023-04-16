@@ -8,7 +8,7 @@ namespace BookShop.Shared
         public int Id { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public string Image { get; set; } = "https://via.placeholder.com/300x300";       
+        public string Image { get; set; } = "https://via.placeholder.com/300x300";
         public bool IsPublic { get; set; }
         public bool IsDeleted { get; set; }
         public Category? Category { get; set; }
@@ -16,5 +16,6 @@ namespace BookShop.Shared
         public List<ProductVariant> Variants { get; set; } = new List<ProductVariant>();      
         public DateTime? DateCreated { get; set; } = DateTime.UtcNow;
         public DateTime? DateUpdated { get; set; }
+        public int Views { get; set; }
     }
 }
