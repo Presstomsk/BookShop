@@ -3,6 +3,7 @@
 @inject ICategoryService CategoryService;
 @inject IProductService ProductService;
 @inject ISyncLocalStorageService LocaleStorage;
+@inject IStatsService StatsService;
 
 @if (category != null)
 {
@@ -38,5 +39,6 @@ else
                                                                     : false) 
                                                                     : null;
         _authText = $"С возвращением, {LocaleStorage.GetItem<string>("username")}!";
+        await StatsService.GetVisitsAsync();
     }
 }

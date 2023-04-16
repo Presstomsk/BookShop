@@ -3,6 +3,7 @@
 @inject ILocalStorageService LocalStorage;
 @inject NavigationManager NavigationManager;
 @inject AuthenticationStateProvider AuthStateProvider;
+@inject IStatsService StatsService;
 
 <h3>Вход</h3>
 
@@ -24,7 +25,8 @@
     private async void HandleLogin()
     {
         await LocalStorage.SetItemAsync<string>("username", _user.Username);
-        await AuthStateProvider.GetAuthenticationStateAsync();
-        NavigationManager.NavigateTo("");
+        await StatsService.IncrementVisitsAsync(_user.Username);
+        await AuthStateProvider.GetAuthenticationStateAsync();        
+        NavigationManager.NavigateTo("");        
     }
 }

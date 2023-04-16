@@ -1,6 +1,7 @@
 using BookShop.Server.Data;
 using BookShop.Server.Services.CategoryService;
 using BookShop.Server.Services.ProductService;
+using BookShop.Server.Services.StatsService;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookShop
@@ -20,6 +21,7 @@ namespace BookShop
             builder.Services.AddRazorPages();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IStatsService, StatsService>();
 
             var app = builder.Build();           
 
