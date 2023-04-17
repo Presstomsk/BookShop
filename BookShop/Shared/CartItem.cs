@@ -1,4 +1,6 @@
-﻿namespace BookShop.Shared
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BookShop.Shared
 {
     public class CartItem
     {
@@ -7,6 +9,7 @@
         public string? ProductTitle { get; set; }
         public string? EditionName { get; set; }
         public decimal Price { get; set; }
-        public string? Image { get; set; }
+        public string? Image { get; set; }       
+        public int Quantity { get; set; }
     }
 }

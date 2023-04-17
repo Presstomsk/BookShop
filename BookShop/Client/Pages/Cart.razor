@@ -2,44 +2,91 @@
 
 @inject ICartService CartService;
 
-<h3>Корзина</h3>
-
-@if (cartItems?.Count <= 0)
+@if (!_isOrderPlaced)
 {
-    <span>В вашей корзине отсутствует товар.</span>
+    <h3>Корзина</h3>
+
+    @if (_cartItems?.Count <= 0)
+    {
+        <span>В вашей корзине отсутствует товар.</span>
+    }
+    else
+    {
+        <div>
+            @foreach (var item in _cartItems)
+            {
+                <div class="item-container">
+                    <div class="item-image-wrapper"><img src="@item.Image" class="item-image" /></div>
+                    <div class="item-name">
+                        <h5><a href="/@item.ProductId">@item.ProductTitle</a></h5>
+                        <span>@item.EditionName</span><br />
+                        <button class="btn-delete" @onclick="@(() => DeleteCartItemAsync(item))">Удалить</button>
+                        <EditForm Model="item">
+                            <input type="number" min="1" id="quantity" @bind-value="@item.Quantity" class="form-control" style="width: 80px;" />
+                        </EditForm>
+                    </div>
+                    <div class="item-price">$@(item.Price * item.Quantity)</div>
+                </div>
+            }
+            <div class="item-price">
+                Всего(@_cartItems.Count): $@_cartItems.Sum(item => item.Price * item.Quantity)
+            </div>
+            <div style="text-align: center; margin-top: 10px;">
+                <button class="btn btn-primary btn-lg" @onclick="PlaceOrderAsync">Оформить заказ</button>
+            </div>
+        </div>
+    }
 }
 else
 {
-    <div>
-        @foreach(var item in cartItems)
-        {
-            <div class="item-container">
-                <div class="item-image-wrapper"><img src="@item.Image" class="item-image"/></div>
-                <div class="item-name">
-                    <h5><a href="/@item.ProductId">@item.ProductTitle</a></h5>
-                    <span>@item.EditionName</span><br/>
-                    <button class="btn-delete" @onclick="@(() => DeleteCartItemAsync(item))">Удалить</button>
+    <h3>Спасибо за ваш заказ!</h3>
+    <h5>Полный перечень товаров:</h5>
+    @if (_cartItems?.Count <= 0)
+    {
+        <span>В вашей корзине отсутствует товар.</span>
+    }
+    else
+    {
+        <div>
+            @foreach (var item in _cartItems)
+            {
+                <div class="item-container">
+                    <div class="item-image-wrapper"><img src="@item.Image" class="item-image" /></div>
+                    <div class="item-name">
+                        <h5><a href="/@item.ProductId">@item.ProductTitle</a></h5>
+                        <span>@item.EditionName</span><br />
+                        <span>@item.Quantity шт.</span><br />
+                    </div>
+                    <div class="item-price">$@(item.Price * item.Quantity)</div>
                 </div>
-                <div class="item-price">$@item.Price</div>
-            </div>
-        }
-        <div class="item-price">
-            Всего(@cartItems.Count): $@cartItems.Sum(item => item.Price)
+            }
+            <div class="item-price">
+                Всего(@_cartItems.Count): $@_cartItems.Sum(item => item.Price * item.Quantity)
+            </div>            
         </div>
-    </div>
+    }
 }
 
+
+
 @code {
-    List<CartItem> cartItems = new List<CartItem>();
+    private List<CartItem> _cartItems = new List<CartItem>();
+    private bool _isOrderPlaced = false;
 
     protected override async Task OnInitializedAsync()
     {
-        cartItems = await CartService.GetCartItemsAsync();
+        _cartItems = await CartService.GetCartItemsAsync();
     }
 
     private async Task DeleteCartItemAsync(CartItem item)
     {
         await CartService.DeleteCartItemAsync(item);
-        cartItems = await CartService.GetCartItemsAsync();
+        _cartItems = await CartService.GetCartItemsAsync();
+    }
+
+    private async Task PlaceOrderAsync()
+    {
+        _isOrderPlaced = true;
+        await CartService.EmptyCartAsync();
     }
 }

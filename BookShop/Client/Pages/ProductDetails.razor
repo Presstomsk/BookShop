@@ -12,7 +12,7 @@
         <div class="col-md-8">
             <div class="card-body"> 
                 <div class="views">
-                    <i class="oi oi-eye"></i> @product?.Views.ToString("0###")
+                    <i class="oi oi-eye"></i> @GetViewString()
                 </div>
                 <h3 class="card-title">@product?.Title</h3><br/>               
                 <p class="card-text">@product?.Description</p>
@@ -35,8 +35,11 @@
                     }
                     <h5 class="price">
                         $@GetSelectedVariant()!.Price
-                    </h5><br/>
+                    </h5>
                 }
+                <EditForm Model="_cartItem">                    
+                    <i>Количество:</i><input type="number" min="1" id="quantity" @bind-value="@_cartItem.Quantity" class="form-control" style="width: 80px;" />
+                </EditForm><br/>
                 <button class="btn btn-primary" @onclick = "AddToCartAsync"><i class="oi oi-cart"></i>&nbsp;&nbsp;&nbsp;Add to Cart</button>
             </div>
         </div>
@@ -46,6 +49,7 @@
 @code {
     private Product? product = new Product();
     private int currentEditionId = 1;
+    private CartItem _cartItem = new CartItem { Quantity = 1 };
 
     [Parameter]
     public int Id { get; set; }
@@ -67,7 +71,34 @@
 
     private async Task AddToCartAsync()
     {
-        await CartService.AddToCartAsync(GetSelectedVariant());
+        var productVariant = GetSelectedVariant();
+        _cartItem.EditionId = productVariant!.EditionId;
+        _cartItem.EditionName = productVariant!.Edition?.Name;
+        _cartItem.Image = product?.Image;
+        _cartItem.Price = productVariant!.Price;
+        _cartItem.ProductId = productVariant!.ProductId;
+        _cartItem.ProductTitle = product?.Title;
+        await CartService.AddToCartAsync(_cartItem);
     }
+
+    private string GetViewString()
+    {
+        if (product?.Views > 1_000_000)
+        {
+            return $"{((float)product.Views / 1_000_000).ToString("#.##")}M";
+        }
+
+        if (product?.Views > 100_000)
+        {
+            return $"{((float)product.Views / 1_000).ToString("#")}K";
+        }
+
+        if (product?.Views > 1_000)
+        {
+            return $"{((float)product.Views / 1_000).ToString("#.##")}K";
+        }
+
+        return product!.Views.ToString("0##");
+    }   
 }
 

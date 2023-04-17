@@ -22,54 +22,37 @@ namespace BookShop.Client.Services.CartService
             _productService = productService;
         }
 
-        public async Task AddToCartAsync(ProductVariant productVariant)
+        public async Task AddToCartAsync(CartItem cartItem)
         {
-            var cart = await _localStorage.GetItemAsync<List<ProductVariant>>("cart");
+            var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
 
             if (cart == null)
             {
-                cart = new List<ProductVariant>();
+                cart = new List<CartItem>();
             }
 
-            cart.Add(productVariant);
+            var sameItem = cart.FirstOrDefault(c => c.ProductId == cartItem.ProductId
+                                                 && c.EditionId == cartItem.EditionId);
+
+            if (sameItem == null)
+            {
+                cart.Add(cartItem);
+            }
+            else
+            {
+                sameItem.Quantity += cartItem.Quantity;
+            }
+            
             await _localStorage.SetItemAsync("cart", cart);
-            var product = await _productService.GetProductAsync(productVariant.ProductId);
+            var product = await _productService.GetProductAsync(cartItem.ProductId);
             _toastService.ShowSuccess($"Товар {product!.Title} добавлен в корзину!");
             OnChange.Invoke();
         }
 
         public async Task<List<CartItem>> GetCartItemsAsync()
-        {
-            var result = new List<CartItem>();
-            var cart = await _localStorage.GetItemAsync<List<ProductVariant>>("cart");
-
-            if (cart == null)
-            {
-                return result;
-            }           
-
-            foreach(var item in cart)
-            {
-                var product = await _productService.GetProductAsync(item.ProductId);
-                var cartItem = new CartItem
-                {
-                    ProductId = product!.Id,
-                    ProductTitle = product!.Title,
-                    Image = product!.Image,
-                    EditionId = item.EditionId
-                };
-                var variant = product.Variants.FirstOrDefault(v => v.EditionId == item.EditionId);
-
-                if (variant != null)
-                {
-                    cartItem.EditionName = variant.Edition?.Name;
-                    cartItem.Price = variant.Price;
-                }
-
-                result.Add(cartItem);
-            }
-
-            return result;
+        {           
+            var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
+            return cart ?? new List<CartItem>();            
         }
 
         public async Task DeleteCartItemAsync(CartItem item)
@@ -89,6 +72,12 @@ namespace BookShop.Client.Services.CartService
             }
 
             await _localStorage.SetItemAsync("cart", cart);
+            OnChange.Invoke();
+        }
+
+        public async Task EmptyCartAsync()
+        {
+            await _localStorage.RemoveItemAsync("cart");
             OnChange.Invoke();
         }
     }
