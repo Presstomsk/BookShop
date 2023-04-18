@@ -30,5 +30,10 @@ namespace BookShop.Client.Services.ProductService
         {
             return await _http.GetFromJsonAsync<Product?>($"Product/{id}");
         }
+
+        public async Task<List<Product>?> SearchProductsAsync(string searchText)
+        {
+            return await _http.GetFromJsonAsync<List<Product>?>($"Product/Search/{searchText}");
+        }
     }
 }

@@ -7,5 +7,6 @@ namespace BookShop.Server.Services.ProductService
         Task<List<Product>> GetAllProductsAsync();
         Task<List<Product>?> GetProductsByCategoryAsync(string categoryUrl);
         Task<Product?> GetProductAsync(int id);
+        Task<List<Product>?> SearchProductsAsync(string searchText);
     }
 }

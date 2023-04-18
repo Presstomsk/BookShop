@@ -32,5 +32,11 @@ namespace BookShop.Server.Controllers
         {
             return Ok(await _productService.GetProductAsync(id));
         }
+
+        [HttpGet("Search/{searchText}")]
+        public async Task<ActionResult<List<Product>?>> SearchProductsAsync(string searchText)
+        {
+            return Ok(await _productService.SearchProductsAsync(searchText));
+        }
     }
 }

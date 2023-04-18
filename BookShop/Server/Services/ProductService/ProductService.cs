@@ -46,6 +46,13 @@ namespace BookShop.Server.Services.ProductService
             }
 
             return null;
-        }       
+        }
+
+        public async Task<List<Product>?> SearchProductsAsync(string searchText)
+        {
+            return await _context.Products.Where(p => (p.Title != null && p.Title.ToLower().Contains(searchText.ToLower()))
+                                 || (p.Description != null && p.Description.ToLower().Contains(searchText.ToLower())))
+                                 .ToListAsync();             
+        }
     }
 }
