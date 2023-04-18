@@ -2,6 +2,7 @@
 using Blazored.Toast.Services;
 using BookShop.Client.Services.ProductService;
 using BookShop.Shared;
+using System.Net.Http.Json;
 
 namespace BookShop.Client.Services.CartService
 {
@@ -10,16 +11,19 @@ namespace BookShop.Client.Services.CartService
         private readonly ILocalStorageService _localStorage;
         private readonly IToastService _toastService;
         private readonly IProductService _productService;
+        private readonly HttpClient _httpClient;
 
         public event Action OnChange;
 
         public CartService(ILocalStorageService localStorage
                          , IToastService toastService
-                         , IProductService productService)
+                         , IProductService productService
+                         , HttpClient httpClient)
         {
             _localStorage = localStorage;
             _toastService = toastService;
             _productService = productService;
+            _httpClient = httpClient;
         }
 
         public async Task AddToCartAsync(CartItem cartItem)
@@ -79,6 +83,13 @@ namespace BookShop.Client.Services.CartService
         {
             await _localStorage.RemoveItemAsync("cart");
             OnChange.Invoke();
+        }
+
+        public async Task<string> CheckoutAsync()
+        {
+            var result = await _httpClient.PostAsJsonAsync("Payment/checkout", await GetCartItemsAsync());
+            var url = await result.Content.ReadAsStringAsync();
+            return url;
         }
     }
 }

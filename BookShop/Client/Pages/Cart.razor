@@ -1,6 +1,7 @@
 ﻿@page "/cart"
 
 @inject ICartService CartService;
+@inject NavigationManager NavigationManager;
 
 @if (!_isOrderPlaced)
 {
@@ -86,7 +87,8 @@ else
 
     private async Task PlaceOrderAsync()
     {
-        _isOrderPlaced = true;
+        var checkoutUrl = await CartService.CheckoutAsync();
+        NavigationManager.NavigateTo(checkoutUrl);       
         await CartService.EmptyCartAsync();
     }
 }

@@ -9,5 +9,6 @@ namespace BookShop.Client.Services.CartService
         Task<List<CartItem>> GetCartItemsAsync();
         Task DeleteCartItemAsync(CartItem item);
         Task EmptyCartAsync();
+        Task<string> CheckoutAsync();
     }
 }
