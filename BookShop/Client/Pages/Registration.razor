@@ -8,7 +8,7 @@
 
 <h3>Регистрация</h3>
 
-<p style="color:green;">@_message <a href="/login">@_login</a></p>
+<p style="color:green;">@_message></p>
 
 <EditForm Model="_user" OnSubmit="HandleRegistration">
     <div class="form-group">
@@ -77,13 +77,13 @@
         if (loginResult?.Success ?? false)
         {
             _message = loginResult.Message!;
-            _login = "Перейдите по ссылке для входа";
+            _login = "Выполните вход.";
             ToastService.ShowSuccess(loginResult.Message!);
         }
         else
         {
             isDisabled = false;
-            ToastService.ShowError(loginResult?.Message ?? "Ошибка регистрации");
+            ToastService.ShowError(loginResult?.Message ?? "Ошибка регистрации.");
         }       
     }
 }

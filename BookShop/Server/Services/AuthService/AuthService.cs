@@ -14,6 +14,7 @@ namespace BookShop.Server.Services.AuthService
         private readonly DataContext _dataContext;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
         public AuthService(DataContext dataContext
                          , IConfiguration configuration
@@ -32,7 +33,7 @@ namespace BookShop.Server.Services.AuthService
             {
                 return new LoginResult
                 {
-                    Message = "Данный пользователь не зарегистрирован",
+                    Message = "Данный пользователь не зарегистрирован.",
                     Success = false
                 };
             }
@@ -41,7 +42,7 @@ namespace BookShop.Server.Services.AuthService
             {
                 return new LoginResult
                 {
-                    Message = "Неверный пароль",
+                    Message = "Неверный пароль.",
                     Success = false
                 };
             }
@@ -52,7 +53,6 @@ namespace BookShop.Server.Services.AuthService
             {
                 Token = token,
                 Success = true,
-                Name = model.Name,
                 Email = model.Email
             };
         }
@@ -71,7 +71,7 @@ namespace BookShop.Server.Services.AuthService
             {
                 return new LoginResult
                 {
-                    Message = "Значения паролей не совпадают",
+                    Message = "Значения паролей не совпадают.",
                     Success = false,
                 };
             }
@@ -84,7 +84,7 @@ namespace BookShop.Server.Services.AuthService
 
             return new LoginResult
             {
-                Message = "Вы успешно зарегистрировались",
+                Message = "Вы успешно зарегистрировались.",
                 Success = true                         
             };
         } 
@@ -93,8 +93,9 @@ namespace BookShop.Server.Services.AuthService
         {
             List<Claim> claims = new List<Claim> 
             {
-                new Claim(ClaimTypes.Actor, regModel.Name),
-                new Claim(ClaimTypes.Role, regModel.Role.ToString())                
+                new Claim(ClaimTypes.Name, regModel.Name),
+                new Claim(ClaimTypes.Role, regModel.Role.ToString()),
+                new Claim(ClaimTypes.Email, regModel.Email)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
@@ -103,10 +104,11 @@ namespace BookShop.Server.Services.AuthService
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: cred);
-            
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            _jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            var jwt = _jwtSecurityTokenHandler.WriteToken(token);
 
             return jwt;
-        }        
+        }              
     }
 }

@@ -30,10 +30,8 @@
 
         if (loginResult?.Success ?? false)
         {
-            await LocalStorage.SetItemAsync<string>("token", loginResult.Token!);
-            await LocalStorage.SetItemAsync<string>("name", loginResult.Name!);
-            await AuthStateProvider.GetAuthenticationStateAsync();           
-            await StatsService.IncrementVisitsAsync(loginResult.Email!);
+            await LocalStorage.SetItemAsync<string>("token", loginResult.Token!);           
+            await AuthStateProvider.GetAuthenticationStateAsync();      
             NavigationManager.NavigateTo("");
         }
         else

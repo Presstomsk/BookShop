@@ -29,6 +29,8 @@ else
 
     [Parameter]
     public string? CategoryUrl { get; set; }
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationState { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -38,7 +40,17 @@ else
                                                                     ? c.Url.ToLower().Equals(CategoryUrl.ToLower())
                                                                     : false) 
                                                                     : null;
-        _authText = $"С возвращением, {LocaleStorage.GetItem<string>("name")}!";
+        if (AuthenticationState != null)
+        { 
+            var authState = await AuthenticationState;
+            var user = authState?.User;
+
+            if (user?.Identity != null && user.Identity.IsAuthenticated)
+            {
+                _authText = $"С возвращением, {user.Identity.Name}!";
+            }
+        }       
+        
         await StatsService.GetVisitsAsync();
     }
 }

@@ -30,6 +30,6 @@ namespace BookShop.Server.Controllers
         public async Task<ActionResult<LoginModel>> RegistrationAsync([FromBody] RegModel regModel)
         {
             return Ok(await _authService.RegistrationAsync(regModel));
-        }        
+        }      
     }
 }

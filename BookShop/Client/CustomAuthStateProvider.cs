@@ -1,8 +1,11 @@
 ﻿using Blazored.LocalStorage;
 using BookShop.Client.Services.AuthService;
+using BookShop.Client.Services.StatsService;
+using BookShop.Shared;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Json;
 using System.Reflection.Metadata;
 using System.Security.Claims;
 using System.Text;
@@ -14,28 +17,53 @@ namespace BookShop.Client
     {
         private readonly ILocalStorageService _localStorage;
         private readonly IAuthService _authService;
-        private readonly HttpClient _httpClient;
+        private readonly IStatsService _statsService;
 
-        public CustomAuthStateProvider(ILocalStorageService localStorage, IAuthService authService , HttpClient httpClient)
+        public CustomAuthStateProvider(ILocalStorageService localStorage
+                                     , IAuthService authService 
+                                     , IStatsService statsService)
         {
             _localStorage = localStorage;
             _authService = authService;
-            _httpClient = httpClient;
+            _statsService = statsService;            
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var state = new AuthenticationState(new ClaimsPrincipal());
-            var token = await _localStorage.GetItemAsStringAsync("token");
-            var name = await _localStorage.GetItemAsStringAsync("name");            
-           
-            if (!string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(name))                
+            var token = await _localStorage.GetItemAsync<string>("token");            
+            var jwtTokenHundler = new JwtSecurityTokenHandler();          
+
+            if (!string.IsNullOrEmpty(token)
+               && jwtTokenHundler.CanReadToken(token)
+               && jwtTokenHundler.CanValidateToken)
             {
-                var identity = new ClaimsIdentity(new[]
-                     {
-                        new Claim(ClaimTypes.Name, name)
-                    }, "authenticated type");
-                state = new AuthenticationState(new ClaimsPrincipal(identity));
+                var jwtSecurityToken = jwtTokenHundler.ReadJwtToken(token);                               
+
+                if (jwtSecurityToken != null && jwtSecurityToken.ValidTo > DateTime.UtcNow)
+                {                    
+                    var userName = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                    var userRole = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                    var userEmail = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+                    if (!string.IsNullOrEmpty(userName) 
+                        && !string.IsNullOrEmpty(userRole) 
+                        && !string.IsNullOrEmpty(userEmail))
+                    {
+                        var identity = new ClaimsIdentity(new[]
+                        {
+                            new Claim(ClaimTypes.Name, userName),
+                            new Claim(ClaimTypes.Role, userRole)
+                        }, "authenticated type");
+                        state = new AuthenticationState(new ClaimsPrincipal(identity));
+
+                        await _statsService.IncrementVisitsAsync(userEmail);
+                    }                   
+                }
+                else
+                {
+                    await _localStorage.RemoveItemAsync("token");
+                }
             }
 
             NotifyAuthenticationStateChanged(Task.FromResult(state));
