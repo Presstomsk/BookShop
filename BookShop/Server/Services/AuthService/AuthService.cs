@@ -1,6 +1,5 @@
 ﻿using BookShop.Server.Data;
 using BookShop.Shared;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,17 +11,14 @@ namespace BookShop.Server.Services.AuthService
     public class AuthService : IAuthService
     {
         private readonly DataContext _dataContext;
-        private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private JwtSecurityTokenHandler _jwtSecurityTokenHandler;
+        private readonly IConfiguration _configuration;       
+        
 
         public AuthService(DataContext dataContext
-                         , IConfiguration configuration
-                         , IHttpContextAccessor httpContextAccessor)
+                         , IConfiguration configuration)
         {
             _dataContext = dataContext;
-            _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;            
         }       
 
         public async Task<LoginResult> LoginAsync(LoginModel loginModel)
@@ -103,10 +99,8 @@ namespace BookShop.Server.Services.AuthService
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(1),
-                signingCredentials: cred);
-
-            _jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-            var jwt = _jwtSecurityTokenHandler.WriteToken(token);
+                signingCredentials: cred);          
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
         }              

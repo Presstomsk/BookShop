@@ -8,7 +8,7 @@
 
 <h3>Регистрация</h3>
 
-<p style="color:green;">@_message></p>
+<p style="color:green;">@_message</p>
 
 <EditForm Model="_user" OnSubmit="HandleRegistration">
     <div class="form-group">
@@ -32,36 +32,12 @@
         <InputText class="form-control" @bind-Value="_user.Surname" id="surname"></InputText>
     </div><br />
     <div class="form-group">
-        <label for="postalcode">Почтовый индекс</label>
-        <InputText type="postalcode" class="form-control" @bind-Value="_user.PostalCode" id="postalcode"></InputText>
-    </div><br />
-    <div class="form-group">
-        <label for="country">Страна</label>
-        <InputText class="form-control" @bind-Value="_user.Country" id="country"></InputText>
-    </div><br />
-    <div class="form-group">
-        <label for="region">Регион</label>
-        <InputText class="form-control" @bind-Value="_user.Region" id="region"></InputText>
-    </div><br/>
-    <div class="form-group">
-        <label for="city">Город/населенный пункт</label>
-        <InputText class="form-control" @bind-Value="_user.City" id="city"></InputText>
-    </div><br/>
-    <div class="form-group">
-        <label for="street">Улица</label>
-        <InputText class="form-control" @bind-Value="_user.Street" id="street"></InputText>
-    </div><br/>
-    <div class="form-group">
-        <label for="house">Дом</label>
-        <InputText class="form-control" @bind-Value="_user.House" id="house"></InputText>
-    </div><br/>
-    <div class="form-group">
-        <label for="room">Квартира</label>
-        <InputText class="form-control" @bind-Value="_user.Room" id="room"></InputText>
-    </div><br />
+        <label for="address">Почтовый адрес</label>
+        <InputText type="address" class="form-control" @bind-Value="_user.Address" id="address"></InputText>
+    </div><br />    
     <div class="form-group">
         <button type="submit" class="btn btn-primary" disabled="@isDisabled">Зарегистрироваться</button>
-    </div><br /><br />
+    </div>
 </EditForm>
 
 @code {
