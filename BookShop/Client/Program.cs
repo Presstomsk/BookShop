@@ -8,7 +8,7 @@ using BookShop.Client.Services.StatsService;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-
+using Radzen;
 
 namespace BookShop.Client
 {
@@ -31,6 +31,7 @@ namespace BookShop.Client
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+            builder.Services.AddScoped<DialogService>();
 
 
             await builder.Build().RunAsync();

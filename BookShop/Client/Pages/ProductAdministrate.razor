@@ -1,0 +1,93 @@
+﻿@page "/administrate"
+
+@inject NavigationManager NavigationManager
+@inject DialogService DialogService;
+@inject HttpClient Http
+
+<h3>Продукты</h3>
+
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" 
+                FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="2" 
+                AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                Data="@GridData" TItem="Product" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+    <Columns>  
+        <RadzenDataGridColumn TItem="Product" Property="Image" Title="Изображение" Frozen="true" Width="160px" TextAlign="TextAlign.Center">
+            <Template Context="data">
+                <RadzenImage Path="@data.Image" class="rz-gravatar" />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Product" Property="Title" Title="Название" Frozen="true" Width="160px" TextAlign="TextAlign.Center" />
+        <RadzenDataGridColumn TItem="Product" Property="Description" Title="Описание" Width="160px" />  
+        <RadzenDataGridColumn TItem="Product" Property="IsPublic" Title="Опубликовано" Width="160px" />
+        <RadzenDataGridColumn TItem="Product" Property="CategoryId" Title="Категория" Width="160px" />        
+        <RadzenDataGridColumn TItem="Product" Property="DateCreated" Title="Дата создания" FormatString="{0:d}" Width="160px" />
+        <RadzenDataGridColumn TItem="Product" Property="DateUpdated" Title="Дата обновления" FormatString="{0:d}" Width="160px" />
+        <RadzenDataGridColumn TItem="Product" Property="Variants" Title="Варианты" Width="160px" />
+        <RadzenDataGridColumn TItem="Product" Property="Views" Title="Количество просмотров" Width="160px" />
+    </Columns>
+</RadzenDataGrid><br/>
+<p>
+    <RadzenButton Click=@(() => CreateProduct()) Text="Добавить" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+</p>
+
+<div class="rz-p-12 rz-text-align-center">
+    <RadzenButton Text="Confirm dialog" ButtonStyle="ButtonStyle.Secondary" 
+        Click=@(() => DialogService.Confirm("Are you sure?", "MyTitle", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" })) />
+</div>
+
+@code {
+    Product? productToDelete;
+
+    public List<Product> GridData { get; set; } = new List<Product>();
+
+    bool showDeleteDialog = false;
+
+    protected override async Task OnInitializedAsync()
+    {        
+        var result = await Http.GetFromJsonAsync<List<Product>?>("Product");
+        if (result != null)
+        {
+            GridData = result;
+        }
+    }
+
+    void EditContact(int id)
+    {
+        NavigationManager.NavigateTo($"contacts/edit/{id}");
+    }
+
+    void CreateProduct()
+    {
+        NavigationManager.NavigateTo($"contacts/new");
+    }
+
+    void DeleteContact(Product product)
+    {
+        productToDelete = product;
+        showDeleteDialog = true;
+    }
+
+    void CancelDeleteContact()
+    {
+        showDeleteDialog = false;
+    }
+
+    async Task ConfirmDeleteContact()
+    {
+        if (productToDelete == null)
+        {
+            return;
+        }
+
+        showDeleteDialog = false;
+        var result = await Http.DeleteAsync($"api/contacts/{productToDelete.Id}");
+        if (result.IsSuccessStatusCode)
+        {
+            var jsonResult = await result.Content.ReadFromJsonAsync<List<Product>>();
+            if (jsonResult is not null)
+            {
+                GridData = jsonResult;
+            }
+        }
+    }
+}
