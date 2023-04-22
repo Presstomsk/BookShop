@@ -1,6 +1,8 @@
 ﻿@page "/login"
 
 @inject ILocalStorageService LocalStorage;
+@inject IAuthService AuthService;
+@inject IToastService ToastService;
 @inject NavigationManager NavigationManager;
 @inject AuthenticationStateProvider AuthStateProvider;
 @inject IStatsService StatsService;
@@ -9,8 +11,8 @@
 
 <EditForm Model="_user" OnSubmit="HandleLogin">
     <div class="form-group">
-        <label for="username">Имя пользователя</label>
-        <InputText id="username" @bind-Value="_user.Username" class="form-control"/>
+        <label for="email">Email</label>
+        <InputText id="email" @bind-Value="_user.Email" type="email" class="form-control"/>
     </div><br/>
     <div class="form-group">
         <label for="password">Пароль</label>
@@ -20,13 +22,23 @@
 </EditForm>
 
 @code {
-    private User _user = new User();
+    private LoginModel _user = new LoginModel();
 
     private async void HandleLogin()
     {
-        await LocalStorage.SetItemAsync<string>("username", _user.Username);
-        await StatsService.IncrementVisitsAsync(_user.Username);
-        await AuthStateProvider.GetAuthenticationStateAsync();        
-        NavigationManager.NavigateTo("");        
+        var loginResult = await AuthService.LoginAsync(_user);
+
+        if (loginResult?.Success ?? false)
+        {
+            await LocalStorage.SetItemAsync<string>("token", loginResult.Token!);
+            await LocalStorage.SetItemAsync<string>("name", loginResult.Name!);
+            await AuthStateProvider.GetAuthenticationStateAsync();           
+            await StatsService.IncrementVisitsAsync(loginResult.Email!);
+            NavigationManager.NavigateTo("");
+        }
+        else
+        {
+            ToastService.ShowError(loginResult?.Message ?? "Ошибка аутентификации");
+        }               
     }
 }

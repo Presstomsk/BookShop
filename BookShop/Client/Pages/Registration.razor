@@ -1,34 +1,89 @@
 ﻿@page "/registration"
 
 @inject ILocalStorageService LocalStorage;
+@inject IAuthService AuthService;
+@inject IToastService ToastService;
 @inject NavigationManager NavigationManager;
 @inject AuthenticationStateProvider AuthStateProvider;
 
 <h3>Регистрация</h3>
 
+<p style="color:green;">@_message <a href="/login">@_login</a></p>
+
 <EditForm Model="_user" OnSubmit="HandleRegistration">
     <div class="form-group">
-        <label for="username">Имя пользователя</label>
-        <InputText id="username" @bind-Value="_user.Username" class="form-control"/>
-    </div><br/>
+        <label for="email">Email</label>
+        <InputText type="email" class="form-control" @bind-Value="_user.Email" id="email"></InputText>
+    </div><br />
     <div class="form-group">
         <label for="password">Пароль</label>
-        <InputText id="password" @bind-Value="_user.Password" type="password" class="form-control" />
+        <InputText type="password" class="form-control" @bind-Value="_user.Password" id="password"></InputText>
+    </div><br />
+    <div class="form-group">
+        <label for="confirmpwd">Повторите пароль</label>
+        <InputText type="password" class="form-control" @bind-Value="_user.ConfirmPwd" id="confirmpwd"></InputText>
+    </div><br />
+    <div class="form-group">
+        <label for="name">Имя</label>
+        <InputText class="form-control" @bind-Value="_user.Name" id="name"></InputText>
     </div><br/>
     <div class="form-group">
-        <label for="email">Электронная почта</label>
-        <InputText id="email" @bind-Value="_user.Email" type="email" class="form-control" />
+        <label for="surname">Фамилия</label>
+        <InputText class="form-control" @bind-Value="_user.Surname" id="surname"></InputText>
     </div><br />
-    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    <div class="form-group">
+        <label for="postalcode">Почтовый индекс</label>
+        <InputText type="postalcode" class="form-control" @bind-Value="_user.PostalCode" id="postalcode"></InputText>
+    </div><br />
+    <div class="form-group">
+        <label for="country">Страна</label>
+        <InputText class="form-control" @bind-Value="_user.Country" id="country"></InputText>
+    </div><br />
+    <div class="form-group">
+        <label for="region">Регион</label>
+        <InputText class="form-control" @bind-Value="_user.Region" id="region"></InputText>
+    </div><br/>
+    <div class="form-group">
+        <label for="city">Город/населенный пункт</label>
+        <InputText class="form-control" @bind-Value="_user.City" id="city"></InputText>
+    </div><br/>
+    <div class="form-group">
+        <label for="street">Улица</label>
+        <InputText class="form-control" @bind-Value="_user.Street" id="street"></InputText>
+    </div><br/>
+    <div class="form-group">
+        <label for="house">Дом</label>
+        <InputText class="form-control" @bind-Value="_user.House" id="house"></InputText>
+    </div><br/>
+    <div class="form-group">
+        <label for="room">Квартира</label>
+        <InputText class="form-control" @bind-Value="_user.Room" id="room"></InputText>
+    </div><br />
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" disabled="@isDisabled">Зарегистрироваться</button>
+    </div><br /><br />
 </EditForm>
 
 @code {
-    private User _user = new User();
+    private RegModel _user = new RegModel();
+    private string _message = string.Empty;
+    private string _login = string.Empty;
+    bool isDisabled = false;
 
-    private async void HandleRegistration()
+    private async Task HandleRegistration()
     {
-        await LocalStorage.SetItemAsync<string>("username", _user.Username);
-        await AuthStateProvider.GetAuthenticationStateAsync();
-        NavigationManager.NavigateTo("");
+        isDisabled = true;
+        var loginResult = await AuthService.RegistrationAsync(_user);
+        if (loginResult?.Success ?? false)
+        {
+            _message = loginResult.Message!;
+            _login = "Перейдите по ссылке для входа";
+            ToastService.ShowSuccess(loginResult.Message!);
+        }
+        else
+        {
+            isDisabled = false;
+            ToastService.ShowError(loginResult?.Message ?? "Ошибка регистрации");
+        }       
     }
 }

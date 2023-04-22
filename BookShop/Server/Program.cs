@@ -1,9 +1,12 @@
 using BookShop.Server.Data;
+using BookShop.Server.Services.AuthService;
 using BookShop.Server.Services.CategoryService;
 using BookShop.Server.Services.PaymentService;
 using BookShop.Server.Services.ProductService;
 using BookShop.Server.Services.StatsService;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace BookShop
 {
@@ -24,6 +27,19 @@ namespace BookShop
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IStatsService, StatsService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddAuthentication().AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+                    ValidateLifetime = true,
+                    ValidateActor = true
+                };
+            });
 
             var app = builder.Build();           
 
@@ -37,16 +53,12 @@ namespace BookShop
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-            }
-
+            }            
             app.UseHttpsRedirection();
-
             app.UseBlazorFrameworkFiles();
-            app.UseStaticFiles();
-
+            app.UseStaticFiles();            
             app.UseRouting();
-
-
+            app.UseAuthorization();
             app.MapRazorPages();
             app.MapControllers();
             app.MapFallbackToFile("index.html");

@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using Blazored.Toast;
+using BookShop.Client.Services.AuthService;
 using BookShop.Client.Services.CartService;
 using BookShop.Client.Services.CategoryService;
 using BookShop.Client.Services.ProductService;
@@ -24,12 +25,13 @@ namespace BookShop.Client
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IStatsService, StatsService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddBlazoredToast();
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
-            
+
 
             await builder.Build().RunAsync();
         }

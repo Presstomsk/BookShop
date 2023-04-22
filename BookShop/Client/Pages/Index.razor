@@ -38,7 +38,7 @@ else
                                                                     ? c.Url.ToLower().Equals(CategoryUrl.ToLower())
                                                                     : false) 
                                                                     : null;
-        _authText = $"С возвращением, {LocaleStorage.GetItem<string>("username")}!";
+        _authText = $"С возвращением, {LocaleStorage.GetItem<string>("name")}!";
         await StatsService.GetVisitsAsync();
     }
 }

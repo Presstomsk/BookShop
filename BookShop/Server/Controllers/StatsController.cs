@@ -18,7 +18,7 @@ namespace BookShop.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<int>> GetVisitsAsync()
         {
-            return await _statsService.GetVisitsAsync();
+            return Ok(await _statsService.GetVisitsAsync());
         }
 
         [HttpPost]

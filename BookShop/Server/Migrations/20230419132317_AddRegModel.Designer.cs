@@ -3,6 +3,7 @@ using System;
 using BookShop.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookShop.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230419132317_AddRegModel")]
+    partial class AddRegModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,7 +140,7 @@ namespace BookShop.Server.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2023, 4, 20, 18, 41, 10, 497, DateTimeKind.Utc).AddTicks(5636),
+                            DateCreated = new DateTime(2023, 4, 19, 13, 23, 17, 259, DateTimeKind.Utc).AddTicks(2644),
                             Description = "The Hitchhiker's Guide to the Galaxy (sometimes referred to as HG2G, HHGTTG, H2G2, or tHGttG) is a comedy science fiction series created by Douglas Adams.",
                             Image = "https://upload.wikimedia.org/wikipedia/en/b/bd/H2G2_UK_front_cover.jpg",
                             IsDeleted = false,
@@ -150,7 +152,7 @@ namespace BookShop.Server.Migrations
                         {
                             Id = 2,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2023, 4, 20, 18, 41, 10, 497, DateTimeKind.Utc).AddTicks(5644),
+                            DateCreated = new DateTime(2023, 4, 19, 13, 23, 17, 259, DateTimeKind.Utc).AddTicks(2654),
                             Description = "Ready Player One is a 2011 science fiction novel, and the debut novel of American author Ernest Cline. The story, set in a dystopia in 2045, follows protagonist Wade Watts on his search for an Easter egg in a worldwide virtual reality game, the discovery of which would lead him to inherit the game creator's fortune.",
                             Image = "https://upload.wikimedia.org/wikipedia/en/a/a4/Ready_Player_One_cover.jpg",
                             IsDeleted = false,
@@ -162,7 +164,7 @@ namespace BookShop.Server.Migrations
                         {
                             Id = 3,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2023, 4, 20, 18, 41, 10, 497, DateTimeKind.Utc).AddTicks(5646),
+                            DateCreated = new DateTime(2023, 4, 19, 13, 23, 17, 259, DateTimeKind.Utc).AddTicks(2656),
                             Description = "Nineteen Eighty-Four: A Novel, often published as 1984, is a dystopian social science fiction novel by English novelist George Orwell. It was published on 8 June 1949 by Secker & Warburg as Orwell's ninth and final book completed in his lifetime.",
                             Image = "https://upload.wikimedia.org/wikipedia/commons/c/c3/1984first.jpg",
                             IsDeleted = false,
