@@ -5,9 +5,9 @@ using System.Text;
 
 namespace BookShop.Shared
 {
-    public class Edition
+    public enum Role
     {
-        public int Id { get; set; }
-        public string? Name { get; set; }
+        Administrator,
+        Client
     }
 }

@@ -1,4 +1,9 @@
-﻿namespace BookShop.Shared
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace BookShop.Shared
 {
     public class Stats
     {

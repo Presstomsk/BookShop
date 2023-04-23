@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace BookShop.Shared
 {
@@ -9,7 +12,7 @@ namespace BookShop.Shared
         public string? ProductTitle { get; set; }
         public string? EditionName { get; set; }
         public decimal Price { get; set; }
-        public string? Image { get; set; }       
+        public string? Image { get; set; }
         public int Quantity { get; set; }
     }
 }
