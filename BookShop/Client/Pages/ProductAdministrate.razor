@@ -5,6 +5,8 @@
 @inject HttpClient Http
 
 <h3>Продукты</h3>
+<AuthorizeView Roles="Client">
+    <Authorized>
 
 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" 
                 FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="2" 
@@ -34,6 +36,14 @@
     <RadzenButton Text="Confirm dialog" ButtonStyle="ButtonStyle.Secondary" 
         Click=@(() => DialogService.Confirm("Are you sure?", "MyTitle", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" })) />
 </div>
+    </Authorized>
+    <NotAuthorized>
+        @{
+            NavigationManager.NavigateTo($"");
+        }
+    </NotAuthorized>
+</AuthorizeView>
+
 
 @code {
     Product? productToDelete;
