@@ -7,17 +7,17 @@
 
 @if (category != null)
 {
-    <h1>Welcome to the @category.Name section!</h1>
+    <h2>Добро пожаловать в раздел "@category.Name"!</h2>
     <ProductList/>
 }
 else
 {
     <AuthorizeView>
         <NotAuthorized>
-            <h1>Добро пожаловать в магазин книг!</h1>
+            <h2>Добро пожаловать в магазин иностранной книги!</h2>
         </NotAuthorized>
         <Authorized>
-            <h1>@_authText</h1>
+            <h2>@_authText</h2>
         </Authorized>
     </AuthorizeView>    
     <ProductList/>

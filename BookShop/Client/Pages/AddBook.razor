@@ -1,0 +1,78 @@
+﻿@page "/addnew"
+
+@inject NavigationManager NavigationManager;
+@inject IEditionService EditionService;
+@inject ICategoryService CategoryService;
+@inject IAdministrateService AdministrateService;
+
+<AuthorizeView Roles=@Role.Administrator.ToString()>
+    <Authorized>   
+        <h3>Добавление продукта</h3>
+        <RadzenRow Gap="1rem">
+            <RadzenColumn Size="12" SizeSM="6" >
+                <RadzenStack>
+                    <RadzenFormField Text="Название" Variant="@variant">
+                        <RadzenTextBox @bind-Value="@product.Title"/>
+                    </RadzenFormField>
+                    <RadzenFormField Text="Описание" Variant="@variant">
+                        <RadzenTextArea @bind-Value="@product.Description" />
+                    </RadzenFormField>
+                    <RadzenFormField Text="Обложка(URL)" Variant="@variant">
+                        <RadzenTextBox @bind-Value="@product.Image" />
+                    </RadzenFormField>                    
+                    <RadzenFormField Text="Категория" Variant="@variant">
+                        <RadzenDropDown Data=@categories @bind-Value="@product.CategoryName"/>
+                    </RadzenFormField>
+                    <RadzenFormField Text="Вариант" Variant="@variant">
+                        <RadzenDropDown Data=@variants @bind-Value="@product.EditionName" />
+                    </RadzenFormField>
+                    <RadzenFormField Text="Стоимость" Variant="@variant">
+                        <RadzenNumeric @bind-Value="@product.OriginalPrice" />
+                    </RadzenFormField>
+                    <RadzenFormField Text="Стоимость с учетом скидки" Variant="@variant">
+                        <RadzenNumeric @bind-Value="@product.Price"/>
+                    </RadzenFormField>
+                    <RadzenButton Click=@(() => CreateProductAsync()) Text="Добавить" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+                </RadzenStack>
+            </RadzenColumn>
+        </RadzenRow>        
+    </Authorized>
+    <NotAuthorized>
+        @{
+            NavigationManager.NavigateTo("");
+        }
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    Variant variant = Variant.Outlined;
+    ExtendedProduct product = new ExtendedProduct();
+    List<string> categories = new List<string>();
+    List<string> variants = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CategoryService.LoadCategoriesAsync();
+
+        foreach(var category in CategoryService.Categories!)
+        {
+            categories.Add(category.Name!);
+        }
+
+        product.CategoryName = categories.FirstOrDefault();
+
+        var editions = await EditionService.GetAllEditionsAsync();
+
+        foreach(var edition in editions!)
+        {
+            variants.Add(edition.Name!);
+        }
+
+        product.EditionName = variants.FirstOrDefault();
+    }
+
+    private async Task CreateProductAsync()
+    {
+       await AdministrateService.CreateProductAsync(product);
+    }
+}

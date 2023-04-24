@@ -1,6 +1,7 @@
 using BookShop.Server.Data;
 using BookShop.Server.Services.AuthService;
 using BookShop.Server.Services.CategoryService;
+using BookShop.Server.Services.EditionService;
 using BookShop.Server.Services.PaymentService;
 using BookShop.Server.Services.ProductService;
 using BookShop.Server.Services.StatsService;
@@ -28,6 +29,7 @@ namespace BookShop
             builder.Services.AddScoped<IStatsService, StatsService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IEditionService, EditionService>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddAuthentication().AddJwtBearer(options =>
             {

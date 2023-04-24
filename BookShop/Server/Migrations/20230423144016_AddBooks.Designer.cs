@@ -3,6 +3,7 @@ using System;
 using BookShop.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookShop.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230423144016_AddBooks")]
+    partial class AddBooks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,7 +151,7 @@ namespace BookShop.Server.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2023, 4, 23, 15, 27, 53, 148, DateTimeKind.Utc).AddTicks(1517),
+                            DateCreated = new DateTime(2023, 4, 23, 14, 40, 16, 149, DateTimeKind.Utc).AddTicks(412),
                             Description = "Kenna Brown leaves prison after serving five years and tries to connect with her four-year-old daughter.",
                             Image = "https://a.allegroimg.com/s512/25ab2d/f78b89344b9e8aac238f8badf1eb/REMINDERS-OF-HIM-CZASTKA-CIEBIE-KTORA-ZNAM-Hoover",
                             IsDeleted = false,
@@ -160,7 +162,7 @@ namespace BookShop.Server.Migrations
                         {
                             Id = 2,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2023, 4, 23, 15, 27, 53, 148, DateTimeKind.Utc).AddTicks(1535),
+                            DateCreated = new DateTime(2023, 4, 23, 14, 40, 16, 149, DateTimeKind.Utc).AddTicks(421),
                             Description = "Sky, 17, fights her feelings for Dean, a boy who is not what he appears to be.",
                             Image = "https://m.media-amazon.com/images/I/71ZnF9mTahL._AC_UF1000,1000_QL80_.jpg",
                             IsDeleted = false,
@@ -171,7 +173,7 @@ namespace BookShop.Server.Migrations
                         {
                             Id = 3,
                             CategoryId = 1,
-                            DateCreated = new DateTime(2023, 4, 23, 15, 27, 53, 148, DateTimeKind.Utc).AddTicks(1537),
+                            DateCreated = new DateTime(2023, 4, 23, 14, 40, 16, 149, DateTimeKind.Utc).AddTicks(423),
                             Description = "After being laid off from her job, Carmen moves in with her successful sister Sofia.",
                             Image = "https://m.media-amazon.com/images/I/71c43tpsEaL.jpg",
                             IsDeleted = false,
@@ -182,7 +184,7 @@ namespace BookShop.Server.Migrations
                         {
                             Id = 4,
                             CategoryId = 2,
-                            DateCreated = new DateTime(2023, 4, 23, 15, 27, 53, 148, DateTimeKind.Utc).AddTicks(1540),
+                            DateCreated = new DateTime(2023, 4, 23, 14, 40, 16, 149, DateTimeKind.Utc).AddTicks(425),
                             Description = "Subtitle: \"Overcoming in Uncertain Times\"",
                             Image = "https://m.media-amazon.com/images/I/81YGTQ33HnL.jpg",
                             IsDeleted = false,
@@ -193,7 +195,7 @@ namespace BookShop.Server.Migrations
                         {
                             Id = 5,
                             CategoryId = 2,
-                            DateCreated = new DateTime(2023, 4, 23, 15, 27, 53, 148, DateTimeKind.Utc).AddTicks(1541),
+                            DateCreated = new DateTime(2023, 4, 23, 14, 40, 16, 149, DateTimeKind.Utc).AddTicks(426),
                             Description = "The actor takes fans behind the scenes of \"Friends\" and opens up about his struggle with addiction and a life-threatening health scare.",
                             Image = "https://m.media-amazon.com/images/I/81tdvyI0MeL.jpg",
                             IsDeleted = false,
@@ -204,7 +206,7 @@ namespace BookShop.Server.Migrations
                         {
                             Id = 6,
                             CategoryId = 3,
-                            DateCreated = new DateTime(2023, 4, 23, 15, 27, 53, 148, DateTimeKind.Utc).AddTicks(1543),
+                            DateCreated = new DateTime(2023, 4, 23, 14, 40, 16, 149, DateTimeKind.Utc).AddTicks(430),
                             Description = "Subtitle: \"A Barefoot Contessa Cookbook\"",
                             Image = "https://m.media-amazon.com/images/I/81vsGXDc+FL._AC_UF1000,1000_QL80_.jpg",
                             IsDeleted = false,
@@ -238,127 +240,127 @@ namespace BookShop.Server.Migrations
                         {
                             ProductId = 1,
                             EditionId = 2,
-                            OriginalPrice = 2.12m,
-                            Price = 1.50m
+                            OriginalPrice = 1.50m,
+                            Price = 2.12m
                         },
                         new
                         {
                             ProductId = 1,
                             EditionId = 3,
-                            OriginalPrice = 2.12m,
-                            Price = 1.50m
+                            OriginalPrice = 1.50m,
+                            Price = 2.12m
                         },
                         new
                         {
                             ProductId = 1,
                             EditionId = 4,
-                            OriginalPrice = 15.15m,
-                            Price = 10.00m
+                            OriginalPrice = 10.00m,
+                            Price = 15.15m
                         },
                         new
                         {
                             ProductId = 2,
                             EditionId = 2,
-                            OriginalPrice = 5.20m,
-                            Price = 4.20m
+                            OriginalPrice = 4.20m,
+                            Price = 5.20m
                         },
                         new
                         {
                             ProductId = 2,
                             EditionId = 3,
-                            OriginalPrice = 4.15m,
-                            Price = 3.50m
+                            OriginalPrice = 3.50m,
+                            Price = 4.15m
                         },
                         new
                         {
                             ProductId = 2,
                             EditionId = 4,
-                            OriginalPrice = 11.35m,
-                            Price = 8.99m
+                            OriginalPrice = 8.99m,
+                            Price = 11.35m
                         },
                         new
                         {
                             ProductId = 3,
                             EditionId = 2,
-                            OriginalPrice = 14.37m,
+                            OriginalPrice = 12.00m,
+                            Price = 14.37m
+                        },
+                        new
+                        {
+                            ProductId = 3,
+                            EditionId = 3,
+                            OriginalPrice = 9.00m,
                             Price = 12.00m
                         },
                         new
                         {
                             ProductId = 3,
-                            EditionId = 3,
-                            OriginalPrice = 12.00m,
-                            Price = 9.00m
-                        },
-                        new
-                        {
-                            ProductId = 3,
                             EditionId = 4,
-                            OriginalPrice = 51.00m,
-                            Price = 47.99m
+                            OriginalPrice = 47.99m,
+                            Price = 51.00m
                         },
                         new
                         {
                             ProductId = 4,
                             EditionId = 2,
-                            OriginalPrice = 14.48m,
-                            Price = 12.15m
+                            OriginalPrice = 12.15m,
+                            Price = 14.48m
                         },
                         new
                         {
                             ProductId = 4,
                             EditionId = 3,
-                            OriginalPrice = 9.99m,
-                            Price = 7.50m
+                            OriginalPrice = 7.50m,
+                            Price = 9.99m
                         },
                         new
                         {
                             ProductId = 4,
                             EditionId = 4,
-                            OriginalPrice = 19.82m,
-                            Price = 17.00m
+                            OriginalPrice = 17.00m,
+                            Price = 19.82m
                         },
                         new
                         {
                             ProductId = 5,
                             EditionId = 2,
-                            OriginalPrice = 13.83m,
-                            Price = 11.70m
+                            OriginalPrice = 11.70m,
+                            Price = 13.83m
                         },
                         new
                         {
                             ProductId = 5,
                             EditionId = 3,
-                            OriginalPrice = 10.99m,
-                            Price = 9.50m
+                            OriginalPrice = 9.50m,
+                            Price = 10.99m
                         },
                         new
                         {
                             ProductId = 5,
                             EditionId = 4,
-                            OriginalPrice = 37.07m,
-                            Price = 27.99m
+                            OriginalPrice = 27.99m,
+                            Price = 32.07m
                         },
                         new
                         {
                             ProductId = 6,
                             EditionId = 2,
-                            OriginalPrice = 11.49m,
-                            Price = 9.15m
+                            OriginalPrice = 9.15m,
+                            Price = 11.49m
                         },
                         new
                         {
                             ProductId = 6,
                             EditionId = 3,
-                            OriginalPrice = 9.49m,
-                            Price = 7.13m
+                            OriginalPrice = 7.13m,
+                            Price = 9.49m
                         },
                         new
                         {
                             ProductId = 6,
                             EditionId = 4,
-                            OriginalPrice = 25.50m,
-                            Price = 22.99m
+                            OriginalPrice = 22.99m,
+                            Price = 25.50m
                         });
                 });
 
@@ -399,9 +401,9 @@ namespace BookShop.Server.Migrations
                         {
                             Email = "admin@admin.ru",
                             Address = "Admin",
-                            ConfirmPwd = "$2a$11$AFMQ/mlQoceInRoeh0VDJOZShUi55T18NM/ZySBtUq/Y3jYRoItuu",
+                            ConfirmPwd = "$2a$11$9PHzspKA4nsPlHsaVIZLqOW53onHg/ASSRhfjZILtHHbJTEf9fxwC",
                             Name = "Admin",
-                            Password = "$2a$11$8FGNYDbQhnknws8ZmjQ6buKWrkn504xW6.LAJUaT2tTN9MDgvZ2uO",
+                            Password = "$2a$11$i.oz/iIp2H2aenVAJXzO4eCjdsxjF6f0UyaOJJWsZtuFqouDNGVFW",
                             Role = 0,
                             Surname = "Admin"
                         });

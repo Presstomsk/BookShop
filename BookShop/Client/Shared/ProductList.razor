@@ -49,11 +49,11 @@
         }
         else if (variants.Count == 1)
         {
-            return $"{variants[0].Price} руб.";
+            return $"${variants[0].Price}";
         }
 
         decimal minPrice = variants.Min(v => v.Price);
 
-        return $"Минимальная цена {minPrice} руб.";
+        return $"Цена от ${minPrice}";
     }
 }

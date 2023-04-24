@@ -18,7 +18,10 @@ namespace BookShop.Server.Services.ProductService
 
         public async Task<List<Product>> GetAllProductsAsync()
         {
-            return await _context.Products.Include(p => p.Variants).ToListAsync();
+            return await _context.Products.Include(p => p.Category)
+                                          .Include(p => p.Variants)
+                                          .ThenInclude(p => p.Edition)
+                                          .ToListAsync();
         }
 
         public async Task<Product?> GetProductAsync(int id)

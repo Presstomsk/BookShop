@@ -1,45 +1,45 @@
 ﻿@page "/administrate"
 
+@inject IAdministrateService AdministrateService;
 @inject NavigationManager NavigationManager
 @inject DialogService DialogService;
 @inject HttpClient Http
 
-<h3>Продукты</h3>
-<AuthorizeView Roles="Client">
+<AuthorizeView Roles=@Role.Administrator.ToString()>
     <Authorized>
-
-<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" 
-                FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="2" 
+        <h3>Продукты</h3>        
+        <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="true" 
+                FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5"
                 AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
-                Data="@GridData" TItem="Product" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
-    <Columns>  
-        <RadzenDataGridColumn TItem="Product" Property="Image" Title="Изображение" Frozen="true" Width="160px" TextAlign="TextAlign.Center">
-            <Template Context="data">
-                <RadzenImage Path="@data.Image" class="rz-gravatar" />
-            </Template>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="Product" Property="Title" Title="Название" Frozen="true" Width="160px" TextAlign="TextAlign.Center" />
-        <RadzenDataGridColumn TItem="Product" Property="Description" Title="Описание" Width="160px" />  
-        <RadzenDataGridColumn TItem="Product" Property="IsPublic" Title="Опубликовано" Width="160px" />
-        <RadzenDataGridColumn TItem="Product" Property="CategoryId" Title="Категория" Width="160px" />        
-        <RadzenDataGridColumn TItem="Product" Property="DateCreated" Title="Дата создания" FormatString="{0:d}" Width="160px" />
-        <RadzenDataGridColumn TItem="Product" Property="DateUpdated" Title="Дата обновления" FormatString="{0:d}" Width="160px" />
-        <RadzenDataGridColumn TItem="Product" Property="Variants" Title="Варианты" Width="160px" />
-        <RadzenDataGridColumn TItem="Product" Property="Views" Title="Количество просмотров" Width="160px" />
-    </Columns>
-</RadzenDataGrid><br/>
-<p>
-    <RadzenButton Click=@(() => CreateProduct()) Text="Добавить" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
-</p>
-
-<div class="rz-p-12 rz-text-align-center">
-    <RadzenButton Text="Confirm dialog" ButtonStyle="ButtonStyle.Secondary" 
-        Click=@(() => DialogService.Confirm("Are you sure?", "MyTitle", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" })) />
-</div>
+                Data="@GridData" TItem="ExtendedProduct" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or"
+                SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedExtendedProduct>
+            <Columns>  
+                <RadzenDataGridColumn TItem="ExtendedProduct" Property="Image" Title="Изображение" Frozen="true" Width="160px" TextAlign="TextAlign.Center">
+                    <Template Context="data">
+                        <RadzenImage Path="@data.Image" Style="height: 100px;"/>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ExtendedProduct" Property="Title" Title="Название" Frozen="true" Width="160px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="ExtendedProduct" Property="Description" Title="Описание" Width="160px" />
+                <RadzenDataGridColumn TItem="ExtendedProduct" Property="CategoryName" Title="Категория" Width="160px" />
+                <RadzenDataGridColumn TItem="ExtendedProduct" Property="EditionName" Title="Вариант" Width="160px" />
+                <RadzenDataGridColumn TItem="ExtendedProduct" Property="OriginalPrice" Title="Цена" Width="160px" />
+                <RadzenDataGridColumn TItem="ExtendedProduct" Property="Price" Title="Скидочная цена" Width="160px" />
+                <RadzenDataGridColumn TItem="ExtendedProduct" Property="DateCreated" Title="Дата публикации" FormatString="{0:d}" Width="160px" />
+                <RadzenDataGridColumn TItem="ExtendedProduct" Property="DateUpdated" Title="Дата обновления" FormatString="{0:d}" Width="160px" />
+                <RadzenDataGridColumn TItem="ExtendedProduct" Property="Views" Title="Количество просмотров" Width="160px" />
+            </Columns>
+        </RadzenDataGrid><br/>
+        <p>
+            <RadzenButton Click="@ClearSelection" Text="Убрать выделение" ButtonStyle="ButtonStyle.Primary" />
+            <RadzenButton Click=@(() => CreateProduct()) Text="Добавить" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+            <RadzenButton Click=@(() => CreateProduct()) Text="Изменить" Icon="edit" ButtonStyle="ButtonStyle.Primary" />
+            <RadzenButton Click=@(() => CreateProduct()) Text="Удалить" Icon="delete" ButtonStyle="ButtonStyle.Primary" />
+        </p>        
     </Authorized>
     <NotAuthorized>
         @{
-            NavigationManager.NavigateTo($"");
+            NavigationManager.NavigateTo("");
         }
     </NotAuthorized>
 </AuthorizeView>
@@ -48,17 +48,21 @@
 @code {
     Product? productToDelete;
 
-    public List<Product> GridData { get; set; } = new List<Product>();
-
-    bool showDeleteDialog = false;
+    public List<ExtendedProduct> GridData { get; set; } = new List<ExtendedProduct>();
+    IList<ExtendedProduct>? selectedExtendedProduct;
 
     protected override async Task OnInitializedAsync()
-    {        
-        var result = await Http.GetFromJsonAsync<List<Product>?>("Product");
+    {
+        var result = await AdministrateService.LoadExtendedProductsAsync();
         if (result != null)
         {
             GridData = result;
         }
+    }
+
+    void ClearSelection()
+    {
+        selectedExtendedProduct = null;
     }
 
     void EditContact(int id)
@@ -68,18 +72,18 @@
 
     void CreateProduct()
     {
-        NavigationManager.NavigateTo($"contacts/new");
+        NavigationManager.NavigateTo($"addnew");
     }
 
     void DeleteContact(Product product)
     {
         productToDelete = product;
-        showDeleteDialog = true;
+       
     }
 
     void CancelDeleteContact()
     {
-        showDeleteDialog = false;
+        
     }
 
     async Task ConfirmDeleteContact()
@@ -89,15 +93,15 @@
             return;
         }
 
-        showDeleteDialog = false;
-        var result = await Http.DeleteAsync($"api/contacts/{productToDelete.Id}");
-        if (result.IsSuccessStatusCode)
-        {
-            var jsonResult = await result.Content.ReadFromJsonAsync<List<Product>>();
-            if (jsonResult is not null)
-            {
-                GridData = jsonResult;
-            }
-        }
+       
+        //var result = await Http.DeleteAsync($"api/contacts/{productToDelete.Id}");
+        //if (result.IsSuccessStatusCode)
+        //{
+        //    var jsonResult = await result.Content.ReadFromJsonAsync<List<Product>>();
+        //    if (jsonResult is not null)
+        //    {
+        //        GridData = jsonResult;
+        //    }
+        //}
     }
 }
