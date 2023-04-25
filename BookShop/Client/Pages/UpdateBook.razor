@@ -1,4 +1,4 @@
-﻿@page "/addnew"
+﻿@page "/update/{productId:int}/{editionId:int}"
 
 @inject NavigationManager NavigationManager;
 @inject IEditionService EditionService;
@@ -6,36 +6,36 @@
 @inject IAdministrateService AdministrateService;
 
 <AuthorizeView Roles=@Role.Administrator.ToString()>
-    <Authorized>   
-        <h3>Добавление продукта</h3>
+    <Authorized>
+        <h3>Изменение продукта</h3>
         <RadzenRow Gap="1rem">
-            <RadzenColumn Size="12" SizeSM="6" >
+            <RadzenColumn Size="12" SizeSM="6">
                 <RadzenStack>
                     <RadzenFormField Text="Название" Variant="@variant">
-                        <RadzenTextBox @bind-Value="@product.Title"/>
+                        <RadzenTextBox @bind-Value="@product.Title" />
                     </RadzenFormField>
                     <RadzenFormField Text="Описание" Variant="@variant">
                         <RadzenTextArea @bind-Value="@product.Description" />
                     </RadzenFormField>
                     <RadzenFormField Text="Обложка(URL)" Variant="@variant">
                         <RadzenTextBox @bind-Value="@product.Image" />
-                    </RadzenFormField>                    
+                    </RadzenFormField>
                     <RadzenFormField Text="Категория" Variant="@variant">
-                        <RadzenDropDown Data=@categories @bind-Value="@product.CategoryName"/>
+                        <RadzenDropDown Data=@categories @bind-Value="@product.CategoryName" />
                     </RadzenFormField>
                     <RadzenFormField Text="Вариант" Variant="@variant">
-                        <RadzenDropDown Data=@variants @bind-Value="@product.EditionName" />
+                        <RadzenTextBox @bind-Value="@product.EditionName" ReadOnly="true" />
                     </RadzenFormField>
                     <RadzenFormField Text="Стоимость" Variant="@variant">
                         <RadzenNumeric @bind-Value="@product.OriginalPrice" />
                     </RadzenFormField>
                     <RadzenFormField Text="Стоимость с учетом скидки" Variant="@variant">
-                        <RadzenNumeric @bind-Value="@product.Price"/>
+                        <RadzenNumeric @bind-Value="@product.Price" />
                     </RadzenFormField>
-                    <RadzenButton Click=@(() => CreateProductAsync()) Text="Добавить" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+                    <RadzenButton Click=@(() => UpdateProductAsync()) Text="Изменить" Icon="edit" ButtonStyle="ButtonStyle.Primary" />
                 </RadzenStack>
             </RadzenColumn>
-        </RadzenRow>        
+        </RadzenRow>
     </Authorized>
     <NotAuthorized>
         @{
@@ -47,33 +47,31 @@
 @code {
     Variant variant = Variant.Outlined;
     ExtendedProduct product = new ExtendedProduct();
-    List<string> categories = new List<string>();
-    List<string> variants = new List<string>();    
+    List<string> categories = new List<string>();    
+    [Parameter]
+    public int ProductId { get; set; }    
+    [Parameter]
+    public int EditionId { get; set; }
+
 
     protected override async Task OnInitializedAsync()
-    {
+    { 
         await CategoryService.LoadCategoriesAsync();
 
-        foreach(var category in CategoryService.Categories!)
+        foreach (var category in CategoryService.Categories!)
         {
             categories.Add(category.Name!);
-        }
+        }       
 
-        product.CategoryName = categories.FirstOrDefault();
+        var extendedProducts = await AdministrateService.LoadExtendedProductsAsync();
+        product = extendedProducts.First(ep => ep.ProductId == ProductId
+                                            && ep.EditionId == EditionId);
 
-        var editions = await EditionService.GetAllEditionsAsync();
-
-        foreach(var edition in editions!)
-        {
-            variants.Add(edition.Name!);
-        }
-
-        product.EditionName = variants.FirstOrDefault();
     }
 
-    private async Task CreateProductAsync()
+    private async Task UpdateProductAsync()
     {
-        await AdministrateService.CreateProductAsync(product);
+        await AdministrateService.UpdateProductAsync(product);
         NavigationManager.NavigateTo("/administrate");
     }
 }

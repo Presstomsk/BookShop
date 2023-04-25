@@ -28,10 +28,15 @@ namespace BookShop.Client
             _statsService = statsService;            
         }
 
+        public async Task<string> GetTokenAsync()
+        {
+            return await _localStorage.GetItemAsync<string>("token");
+        }
+
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var state = new AuthenticationState(new ClaimsPrincipal());
-            var token = await _localStorage.GetItemAsync<string>("token");            
+            var token = await GetTokenAsync();            
             var jwtTokenHundler = new JwtSecurityTokenHandler();          
 
             if (!string.IsNullOrEmpty(token)

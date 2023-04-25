@@ -1,4 +1,5 @@
 ﻿
+using BookShop.Server.Services.AdministrateService;
 using BookShop.Shared;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -12,10 +13,23 @@ namespace BookShop.Server.Controllers
     [Authorize(Roles = "Administrator")]
     public class AdministrateController : ControllerBase
     {
-        [HttpPost("addbook")]
-        public void CreateProduct()
-        {
+        private readonly IAdministrateService _administrateService;
 
+        public AdministrateController(IAdministrateService administrateService)
+        {
+            _administrateService = administrateService;
+        }
+
+        [HttpPost("addbook")]
+        public async Task CreateProductAsync(ExtendedProduct extendedProduct)
+        {
+            await _administrateService.CreateProductAsync(extendedProduct);
+        }
+
+        [HttpPost("updatebook")]
+        public async Task UpdateProductAsync(ExtendedProduct extendedProduct)
+        {
+            await _administrateService.UpdateProductAsync(extendedProduct);
         }
     }
 }

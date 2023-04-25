@@ -1,10 +1,9 @@
 ﻿using BookShop.Shared;
 
-namespace BookShop.Client.Services.AdministrateService
+namespace BookShop.Server.Services.AdministrateService
 {
     public interface IAdministrateService
     {
-        Task<List<ExtendedProduct>> LoadExtendedProductsAsync();
         Task CreateProductAsync(ExtendedProduct extendedProduct);
         Task UpdateProductAsync(ExtendedProduct extendedProduct);
     }

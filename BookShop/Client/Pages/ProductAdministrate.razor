@@ -33,8 +33,8 @@
         <p>
             <RadzenButton Click="@ClearSelection" Text="Убрать выделение" ButtonStyle="ButtonStyle.Primary" />
             <RadzenButton Click=@(() => CreateProduct()) Text="Добавить" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
-            <RadzenButton Click=@(() => CreateProduct()) Text="Изменить" Icon="edit" ButtonStyle="ButtonStyle.Primary" />
-            <RadzenButton Click=@(() => CreateProduct()) Text="Удалить" Icon="delete" ButtonStyle="ButtonStyle.Primary" />
+            <RadzenButton Click=@(() => UpdateProduct()) Text="Изменить" Icon="edit" ButtonStyle="ButtonStyle.Primary" />
+            <RadzenButton Click=@(() => DeleteProduct()) Text="Удалить" Icon="delete" ButtonStyle="ButtonStyle.Primary" />
         </p>        
     </Authorized>
     <NotAuthorized>
@@ -65,9 +65,14 @@
         selectedExtendedProduct = null;
     }
 
-    void EditContact(int id)
+    void UpdateProduct()
     {
-        NavigationManager.NavigateTo($"contacts/edit/{id}");
+        var product = selectedExtendedProduct?.First();
+
+        if (product != null)
+        {
+            NavigationManager.NavigateTo($"update/{product.ProductId}/{product.EditionId}");
+        }
     }
 
     void CreateProduct()
@@ -75,9 +80,9 @@
         NavigationManager.NavigateTo($"addnew");
     }
 
-    void DeleteContact(Product product)
+    void DeleteProduct()
     {
-        productToDelete = product;
+        //productToDelete = product;
        
     }
 
