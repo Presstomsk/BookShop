@@ -1,13 +1,16 @@
 using BookShop.Server.Data;
 using BookShop.Server.Services.AuthService;
+using BookShop.Server.Services.AuthService.JwtValidator;
 using BookShop.Server.Services.CategoryService;
 using BookShop.Server.Services.EditionService;
 using BookShop.Server.Services.PaymentService;
 using BookShop.Server.Services.ProductService;
 using BookShop.Server.Services.StatsService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+
 
 namespace BookShop
 {
@@ -29,19 +32,16 @@ namespace BookShop
             builder.Services.AddScoped<IStatsService, StatsService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<IEditionService, EditionService>();
-            builder.Services.AddHttpContextAccessor();
-            builder.Services.AddAuthentication().AddJwtBearer(options =>
+            builder.Services.AddScoped<IEditionService, EditionService>();            
+            builder.Services.AddAuthentication( o => { 
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
             {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-                    ValidateLifetime = true,
-                    ValidateActor = true
-                };
+                options.RequireHttpsMetadata = true;
+                options.SecurityTokenValidators.Add(new JwtValidator(builder.Configuration.GetSection("AppSettings:Token").Value));                
             });
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();           
 
@@ -60,6 +60,7 @@ namespace BookShop
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();            
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapRazorPages();
             app.MapControllers();

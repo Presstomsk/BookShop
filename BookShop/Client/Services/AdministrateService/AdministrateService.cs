@@ -1,7 +1,10 @@
-﻿using BookShop.Client.Services.CategoryService;
+﻿using Blazored.LocalStorage;
+using BookShop.Client.Services.CategoryService;
 using BookShop.Client.Services.EditionService;
 using BookShop.Client.Services.ProductService;
 using BookShop.Shared;
+using System.Linq.Dynamic.Core.Tokenizer;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace BookShop.Client.Services.AdministrateService
@@ -12,16 +15,19 @@ namespace BookShop.Client.Services.AdministrateService
         private readonly HttpClient _http;
         private readonly ICategoryService _categoryService;
         private readonly IEditionService _editionService;
+        private readonly ILocalStorageService _localStorageService;
 
         public AdministrateService(IProductService productService
                                    , HttpClient http 
                                    , ICategoryService categoryService
-                                   , IEditionService editionService)
+                                   , IEditionService editionService
+                                   , ILocalStorageService localStorageService)
         {
             _productService = productService;
             _http = http;
             _categoryService = categoryService;
             _editionService = editionService;
+            _localStorageService = localStorageService;
         }
 
         public async Task<List<ExtendedProduct>> LoadExtendedProductsAsync()
@@ -80,6 +86,16 @@ namespace BookShop.Client.Services.AdministrateService
                 Edition = editions?.FirstOrDefault(e => e.Name!.ToLower().Equals(extendedProduct.EditionName)),
                 Product = product
             });
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "/Administrate/addbook");
+
+            request.Headers.Add("Authorization", "Bearer " + await _localStorageService.GetItemAsync<string>("token"));
+            Console.WriteLine(await _localStorageService.GetItemAsync<string>("token"));
+            Console.WriteLine("Bearer " + await _localStorageService.GetItemAsync<string>("token"));
+            using (var response = await _http.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+            }
         }
     }
 }
