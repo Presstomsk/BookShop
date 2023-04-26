@@ -31,5 +31,11 @@ namespace BookShop.Server.Controllers
         {
             await _administrateService.UpdateProductAsync(extendedProduct);
         }
+
+        [HttpPost("deletebook")]
+        public async Task DeleteProductAsync(ExtendedProduct extendedProduct)
+        {
+            await _administrateService.DeleteProductAsync(extendedProduct);
+        }
     }
 }

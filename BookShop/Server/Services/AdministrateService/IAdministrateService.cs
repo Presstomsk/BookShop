@@ -6,5 +6,6 @@ namespace BookShop.Server.Services.AdministrateService
     {
         Task CreateProductAsync(ExtendedProduct extendedProduct);
         Task UpdateProductAsync(ExtendedProduct extendedProduct);
+        Task DeleteProductAsync(ExtendedProduct extendedProduct);
     }
 }

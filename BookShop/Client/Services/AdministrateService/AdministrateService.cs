@@ -76,5 +76,17 @@ namespace BookShop.Client.Services.AdministrateService
                 response.EnsureSuccessStatusCode();
             }
         }
+
+        public async Task DeleteProductAsync(ExtendedProduct extendedProduct)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, "/Administrate/deletebook");
+            request.Headers.Add("Authorization", "Bearer " + await _localStorageService.GetItemAsync<string>("token"));
+            request.Content = JsonContent.Create(extendedProduct, typeof(ExtendedProduct));
+
+            using (var response = await _http.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+            }
+        }
     }
 }

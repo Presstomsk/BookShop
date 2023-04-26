@@ -1,0 +1,68 @@
+﻿@page "/delete/{productId:int}/{editionId:int}"
+
+@inject NavigationManager NavigationManager;
+@inject IEditionService EditionService;
+@inject ICategoryService CategoryService;
+@inject IAdministrateService AdministrateService;
+
+<AuthorizeView Roles=@Role.Administrator.ToString()>
+    <Authorized>
+        <h3>Удаление продукта</h3>
+        <RadzenRow Gap="1rem">
+            <RadzenColumn Size="12" SizeSM="6">
+                <RadzenStack>
+                    <RadzenFormField Text="Название" Variant="@variant">
+                        <RadzenTextBox @bind-Value="@product.Title" ReadOnly="true" />
+                    </RadzenFormField>
+                    <RadzenFormField Text="Описание" Variant="@variant">
+                        <RadzenTextArea @bind-Value="@product.Description" ReadOnly="true"/>
+                    </RadzenFormField>
+                    <RadzenFormField Text="Обложка(URL)" Variant="@variant">
+                        <RadzenTextBox @bind-Value="@product.Image" ReadOnly="true" />
+                    </RadzenFormField>
+                    <RadzenFormField Text="Категория" Variant="@variant">
+                        <RadzenTextBox @bind-Value="@product.CategoryName" ReadOnly="true" />
+                    </RadzenFormField>
+                    <RadzenFormField Text="Вариант" Variant="@variant">
+                        <RadzenTextBox @bind-Value="@product.EditionName" ReadOnly="true" />
+                    </RadzenFormField>
+                    <RadzenFormField Text="Стоимость" Variant="@variant">
+                        <RadzenNumeric @bind-Value="@product.OriginalPrice" ReadOnly="true" />
+                    </RadzenFormField>
+                    <RadzenFormField Text="Стоимость с учетом скидки" Variant="@variant">
+                        <RadzenNumeric @bind-Value="@product.Price" ReadOnly="true"/>
+                    </RadzenFormField>
+                    <RadzenButton Click=@(() => DeleteProductAsync()) Text="Удалить" Icon="delete" ButtonStyle="ButtonStyle.Primary" />
+                </RadzenStack>
+            </RadzenColumn>
+        </RadzenRow>
+    </Authorized>
+    <NotAuthorized>
+        @{
+            NavigationManager.NavigateTo("");
+        }
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    Variant variant = Variant.Outlined;
+    ExtendedProduct product = new ExtendedProduct();    
+    [Parameter]
+    public int ProductId { get; set; }
+    [Parameter]
+    public int EditionId { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var extendedProducts = await AdministrateService.LoadExtendedProductsAsync();
+        product = extendedProducts.First(ep => ep.ProductId == ProductId
+                                            && ep.EditionId == EditionId);
+    }
+
+    private async Task DeleteProductAsync()
+    {
+        await AdministrateService.DeleteProductAsync(product);
+        NavigationManager.NavigateTo("/administrate");
+    }
+}

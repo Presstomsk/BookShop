@@ -24,7 +24,6 @@ namespace BookShop.Server.Services.AdministrateService
                 Description = extendedProduct.Description,
                 Image = extendedProduct.Image,
                 CategoryId = categoryId,                
-                IsDeleted = false,
                 Views = 0
             };
 
@@ -38,6 +37,24 @@ namespace BookShop.Server.Services.AdministrateService
 
             await _dataContext.AddAsync(productVariant);
             await _dataContext.AddAsync(product);
+            await _dataContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteProductAsync(ExtendedProduct extendedProduct)
+        {
+            var product = _dataContext.Products.Include(p => p.Variants).First(p => p.Id == extendedProduct.ProductId);
+            var edition = product.Variants.First(pv => pv.ProductId == product.Id
+                                                    && pv.EditionId == extendedProduct.EditionId);
+            if (product.Variants.Count > 0)
+            {
+                product.Variants.Remove(edition);
+
+                if (product.Variants.Count == 0)
+                {
+                    _dataContext.Products.Remove(product);
+                }
+            }
+
             await _dataContext.SaveChangesAsync();
         }
 

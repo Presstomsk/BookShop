@@ -45,8 +45,7 @@
 </AuthorizeView>
 
 
-@code {
-    Product? productToDelete;
+@code {   
 
     public List<ExtendedProduct> GridData { get; set; } = new List<ExtendedProduct>();
     IList<ExtendedProduct>? selectedExtendedProduct;
@@ -82,31 +81,11 @@
 
     void DeleteProduct()
     {
-        //productToDelete = product;
-       
-    }
+        var product = selectedExtendedProduct?.First();
 
-    void CancelDeleteContact()
-    {
-        
-    }
-
-    async Task ConfirmDeleteContact()
-    {
-        if (productToDelete == null)
+        if (product != null)
         {
-            return;
-        }
-
-       
-        //var result = await Http.DeleteAsync($"api/contacts/{productToDelete.Id}");
-        //if (result.IsSuccessStatusCode)
-        //{
-        //    var jsonResult = await result.Content.ReadFromJsonAsync<List<Product>>();
-        //    if (jsonResult is not null)
-        //    {
-        //        GridData = jsonResult;
-        //    }
-        //}
-    }
+            NavigationManager.NavigateTo($"delete/{product.ProductId}/{product.EditionId}");
+        }     
+    }   
 }
