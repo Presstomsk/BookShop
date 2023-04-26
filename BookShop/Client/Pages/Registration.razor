@@ -6,6 +6,14 @@
 @inject NavigationManager NavigationManager;
 @inject AuthenticationStateProvider AuthStateProvider;
 
+<AuthorizeView>
+    <Authorized>
+        @{
+            NavigationManager.NavigateTo("");
+        }
+    </Authorized>
+</AuthorizeView>
+
 <h3>Регистрация</h3>
 
 <p style="color:green;">@_message</p>

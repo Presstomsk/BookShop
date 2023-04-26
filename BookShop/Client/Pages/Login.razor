@@ -7,6 +7,14 @@
 @inject AuthenticationStateProvider AuthStateProvider;
 @inject IStatsService StatsService;
 
+<AuthorizeView>
+    <Authorized>
+        @{
+            NavigationManager.NavigateTo("");
+        }
+    </Authorized>
+</AuthorizeView>
+
 <h3>Вход</h3>
 <EditForm Model="_user" OnSubmit="HandleLogin">
     <div class="form-group">
