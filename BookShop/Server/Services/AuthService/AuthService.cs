@@ -59,15 +59,16 @@ namespace BookShop.Server.Services.AuthService
             {
                 return new LoginResult
                 {
-                    Message = "Пользователь с данным Email уже существует.",
+                    Message = StringConsts.USER_IS_REGISTERED,
                     Success = false
                 };
             }
+
             if (regModel.Password != regModel.ConfirmPwd)
             {
                 return new LoginResult
                 {
-                    Message = "Значения паролей не совпадают.",
+                    Message = StringConsts.PASSWORD_NOT_EQUAL_CONFIRM_PASSWORD,
                     Success = false,
                 };
             }
@@ -80,7 +81,7 @@ namespace BookShop.Server.Services.AuthService
 
             return new LoginResult
             {
-                Message = "Вы успешно зарегистрировались.",
+                Message = StringConsts.OK_REGISTRATION,
                 Success = true                         
             };
         } 

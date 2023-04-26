@@ -3,6 +3,7 @@
 @inject ILocalStorageService LocalStorage;
 @inject IAuthService AuthService;
 @inject IToastService ToastService;
+@inject AbstractValidator<IRegModel> Validator;
 @inject NavigationManager NavigationManager;
 @inject AuthenticationStateProvider AuthStateProvider;
 
@@ -58,17 +59,27 @@
     private async Task HandleRegistration()
     {
         isDisabled = true;
-        var loginResult = await AuthService.RegistrationAsync(_user);
-        if (loginResult?.Success ?? false)
+        var validateResult = Validator.Validate(_user);
+        if (validateResult.IsValid)
         {
-            _message = loginResult.Message!;
-            _login = "Выполните вход.";
-            ToastService.ShowSuccess(loginResult.Message!);
+            var loginResult = await AuthService.RegistrationAsync(_user);
+            if (loginResult?.Success ?? false)
+            {
+                _message = loginResult.Message!;
+                _login = StringConsts.NEED_LOGIN;
+                isDisabled = false;
+                ToastService.ShowSuccess(loginResult.Message!);
+            }
+            else
+            {
+                isDisabled = false;
+                ToastService.ShowError(loginResult?.Message ?? StringConsts.REGISTRATION_ERROR);
+            }
         }
         else
         {
             isDisabled = false;
-            ToastService.ShowError(loginResult?.Message ?? "Ошибка регистрации.");
-        }       
+            ToastService.ShowError(validateResult.Errors[0].ErrorMessage);            
+        }
     }
 }

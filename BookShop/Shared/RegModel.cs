@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BookShop.Shared
 {
-    public class RegModel : LoginModel
+    public class RegModel : LoginModel, IRegModel
     {
         public string ConfirmPwd { get; set; }
         public string Name { get; set; }

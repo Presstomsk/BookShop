@@ -1,8 +1,6 @@
-﻿using BookShop.Client.Pages;
-using BookShop.Shared;
-using Newtonsoft.Json.Linq;
+﻿using BookShop.Shared;
 using System.Net.Http.Json;
-using static System.Net.WebRequestMethods;
+
 
 namespace BookShop.Client.Services.AuthService
 {
@@ -34,7 +32,7 @@ namespace BookShop.Client.Services.AuthService
                 LoginResult? result = await msg.Content.ReadFromJsonAsync<LoginResult>();
                 if (result?.Success ?? false)
                 {
-                    result.Message += " Пожалуйста, осуществите вход на сайт.";
+                    result.Message += StringConsts.PLEASE_LOGIN;
                 }
 
                 return result;
