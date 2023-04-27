@@ -4,8 +4,8 @@ namespace BookShop.Server.Services.AdministrateService
 {
     public interface IAdministrateService
     {
-        Task CreateProductAsync(ExtendedProduct extendedProduct);
-        Task UpdateProductAsync(ExtendedProduct extendedProduct);
-        Task DeleteProductAsync(ExtendedProduct extendedProduct);
+        Task<AdmResult> CreateProductAsync(ExtendedProduct extendedProduct);
+        Task<AdmResult> UpdateProductAsync(ExtendedProduct extendedProduct);
+        Task<AdmResult> DeleteProductAsync(ExtendedProduct extendedProduct);
     }
 }

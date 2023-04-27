@@ -2,7 +2,7 @@
 
 namespace BookShop.Shared
 {
-    public class ExtendedProduct
+    public class ExtendedProduct : IExtendedProduct
     {
         public int ProductId { get; set; }
         public int EditionId { get; set; }

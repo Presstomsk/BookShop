@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BookShop.Shared
 {
-    public class LoginModel
+    public class LoginModel : ILoginModel
     {
         [Key]
         public string Email { get; set; } // email will be the username, too        

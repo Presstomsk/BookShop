@@ -34,9 +34,11 @@ namespace BookShop.Client
             builder.Services.AddScoped<IAdministrateService, AdministrateService>();
             builder.Services.AddScoped<IEditionService, EditionService>();
             builder.Services.AddScoped<IRegModel, RegModel>();
+            builder.Services.AddScoped<ILoginModel, LoginModel>();
+            builder.Services.AddScoped<IExtendedProduct, ExtendedProduct>();
             builder.Services.AddScoped<AbstractValidator<IRegModel>, RegModelValidator>();
-            builder.Services.AddScoped<AbstractValidator<LoginModel>, LoginModelValidator>();
-            builder.Services.AddScoped<AbstractValidator<ExtendedProduct>, ExtendedProductValidator>();
+            builder.Services.AddScoped<AbstractValidator<ILoginModel>, LoginModelValidator>();
+            builder.Services.AddScoped<AbstractValidator<IExtendedProduct>, ExtendedProductValidator>();
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddBlazoredToast();
             builder.Services.AddOptions();

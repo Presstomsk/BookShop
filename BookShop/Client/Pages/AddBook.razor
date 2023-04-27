@@ -4,6 +4,8 @@
 @inject IEditionService EditionService;
 @inject ICategoryService CategoryService;
 @inject IAdministrateService AdministrateService;
+@inject AbstractValidator<IExtendedProduct> Validator;
+@inject IToastService ToastService;
 
 <AuthorizeView Roles=@Role.Administrator.ToString()>
     <Authorized>   
@@ -32,7 +34,7 @@
                     <RadzenFormField Text="Стоимость с учетом скидки" Variant="@variant">
                         <RadzenNumeric @bind-Value="@product.Price"/>
                     </RadzenFormField>
-                    <RadzenButton Click=@(() => CreateProductAsync()) Text="Добавить" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+                    <RadzenButton Click=@(() => CreateProductAsync()) Text="Добавить" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" Disabled="@isDisabled"/>
                 </RadzenStack>
             </RadzenColumn>
         </RadzenRow>        
@@ -48,7 +50,8 @@
     Variant variant = Variant.Outlined;
     ExtendedProduct product = new ExtendedProduct();
     List<string> categories = new List<string>();
-    List<string> variants = new List<string>();    
+    List<string> variants = new List<string>();
+    bool isDisabled = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -73,7 +76,28 @@
 
     private async Task CreateProductAsync()
     {
-        await AdministrateService.CreateProductAsync(product);
-        NavigationManager.NavigateTo("/administrate");
+        isDisabled = true;
+        var validateResult = Validator.Validate(product);
+
+        if (validateResult.IsValid)
+        {
+            var result = await AdministrateService.CreateProductAsync(product);
+
+            if (result.Success)
+            {
+                isDisabled = false;
+                NavigationManager.NavigateTo("/administrate");
+            }
+            else
+            {
+                isDisabled = false;
+                ToastService.ShowError(result.Message!);
+            }
+        }
+        else
+        {
+            isDisabled = false;
+            ToastService.ShowError(validateResult.Errors[0].ErrorMessage);
+        }
     }
 }

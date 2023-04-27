@@ -4,6 +4,8 @@
 @inject IEditionService EditionService;
 @inject ICategoryService CategoryService;
 @inject IAdministrateService AdministrateService;
+@inject AbstractValidator<IExtendedProduct> Validator;
+@inject IToastService ToastService;
 
 <AuthorizeView Roles=@Role.Administrator.ToString()>
     <Authorized>
@@ -32,7 +34,7 @@
                     <RadzenFormField Text="Стоимость с учетом скидки" Variant="@variant">
                         <RadzenNumeric @bind-Value="@product.Price" />
                     </RadzenFormField>
-                    <RadzenButton Click=@(() => UpdateProductAsync()) Text="Изменить" Icon="edit" ButtonStyle="ButtonStyle.Primary" />
+                    <RadzenButton Click=@(() => UpdateProductAsync()) Text="Изменить" Icon="edit" ButtonStyle="ButtonStyle.Primary" Disabled="@isDisabled" />
                 </RadzenStack>
             </RadzenColumn>
         </RadzenRow>
@@ -52,6 +54,7 @@
     public int ProductId { get; set; }    
     [Parameter]
     public int EditionId { get; set; }
+    bool isDisabled = false;
 
 
     protected override async Task OnInitializedAsync()
@@ -71,7 +74,27 @@
 
     private async Task UpdateProductAsync()
     {
-        await AdministrateService.UpdateProductAsync(product);
-        NavigationManager.NavigateTo("/administrate");
+        isDisabled = true;
+        var validateResult = Validator.Validate(product);
+
+        if (validateResult.IsValid)
+        {
+            var result = await AdministrateService.UpdateProductAsync(product);
+            if (result.Success)
+            {
+                isDisabled = false;
+                NavigationManager.NavigateTo("/administrate");
+            }
+            else
+            {
+                isDisabled = false;
+                ToastService.ShowError(result.Message!);
+            }
+        }
+        else
+        {
+            isDisabled = false;
+            ToastService.ShowError(validateResult.Errors[0].ErrorMessage);
+        }
     }
 }

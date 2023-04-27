@@ -21,21 +21,21 @@ namespace BookShop.Server.Controllers
         }
 
         [HttpPost("addbook")]
-        public async Task CreateProductAsync(ExtendedProduct extendedProduct)
+        public async Task<ActionResult<AdmResult>> CreateProductAsync(ExtendedProduct extendedProduct)
         {
-            await _administrateService.CreateProductAsync(extendedProduct);
+            return Ok(await _administrateService.CreateProductAsync(extendedProduct));
         }
 
         [HttpPost("updatebook")]
-        public async Task UpdateProductAsync(ExtendedProduct extendedProduct)
+        public async Task<ActionResult<AdmResult>> UpdateProductAsync(ExtendedProduct extendedProduct)
         {
-            await _administrateService.UpdateProductAsync(extendedProduct);
+            return Ok(await _administrateService.UpdateProductAsync(extendedProduct));
         }
 
         [HttpPost("deletebook")]
-        public async Task DeleteProductAsync(ExtendedProduct extendedProduct)
+        public async Task<ActionResult<AdmResult>> DeleteProductAsync(ExtendedProduct extendedProduct)
         {
-            await _administrateService.DeleteProductAsync(extendedProduct);
+            return Ok(await _administrateService.DeleteProductAsync(extendedProduct));
         }
     }
 }

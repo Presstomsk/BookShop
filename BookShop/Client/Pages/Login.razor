@@ -3,6 +3,7 @@
 @inject ILocalStorageService LocalStorage;
 @inject IAuthService AuthService;
 @inject IToastService ToastService;
+@inject AbstractValidator<ILoginModel> Validator;
 @inject NavigationManager NavigationManager;
 @inject AuthenticationStateProvider AuthStateProvider;
 @inject IStatsService StatsService;
@@ -25,25 +26,38 @@
         <label for="password">Пароль</label>
         <InputText id="password" @bind-Value="_user.Password" type="password" class="form-control" />
     </div><br />
-    <button type="submit" class="btn btn-primary">Войти</button>
+    <button type="submit" class="btn btn-primary" disabled="@isDisabled">Войти</button>
 </EditForm>
 
 @code {
     private LoginModel _user = new LoginModel();
+    bool isDisabled = false;
 
     private async void HandleLogin()
     {
-        var loginResult = await AuthService.LoginAsync(_user);
-
-        if (loginResult?.Success ?? false)
+        isDisabled = true;
+        var validateResult = Validator.Validate(_user);
+        if (validateResult.IsValid)
         {
-            await LocalStorage.SetItemAsync<string>("token", loginResult.Token!);           
-            await AuthStateProvider.GetAuthenticationStateAsync();      
-            NavigationManager.NavigateTo("");
+            var loginResult = await AuthService.LoginAsync(_user);
+
+            if (loginResult?.Success ?? false)
+            {
+                await LocalStorage.SetItemAsync<string>("token", loginResult.Token!);
+                await AuthStateProvider.GetAuthenticationStateAsync();
+                isDisabled = false;
+                NavigationManager.NavigateTo("");
+            }
+            else
+            {
+                isDisabled = false;
+                ToastService.ShowError(loginResult?.Message ?? StringConsts.AUTH_ERROR);
+            }
         }
         else
         {
-            ToastService.ShowError(loginResult?.Message ?? "Ошибка аутентификации");
-        }               
+            isDisabled = false;
+            ToastService.ShowError(validateResult.Errors[0].ErrorMessage);
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace BookShop.Server.Services.AuthService
             {
                 return new LoginResult
                 {
-                    Message = "Данный пользователь не зарегистрирован.",
+                    Message = StringConsts.USER_IS_NOT_REGISTERED,
                     Success = false
                 };
             }
@@ -38,7 +38,7 @@ namespace BookShop.Server.Services.AuthService
             {
                 return new LoginResult
                 {
-                    Message = "Неверный пароль.",
+                    Message = StringConsts.INCORRECT_PASSWORD,
                     Success = false
                 };
             }

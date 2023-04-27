@@ -53,7 +53,7 @@ namespace BookShop.Client.Services.AdministrateService
             return extendedProducts;
         }
 
-        public async Task CreateProductAsync(ExtendedProduct extendedProduct)
+        public async Task<AdmResult> CreateProductAsync(ExtendedProduct extendedProduct)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "/Administrate/addbook");
             request.Headers.Add("Authorization", "Bearer " + await _localStorageService.GetItemAsync<string>("token"));
@@ -62,10 +62,12 @@ namespace BookShop.Client.Services.AdministrateService
             using (var response = await _http.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadFromJsonAsync<AdmResult>();
+                return result!;
             }
         }
 
-        public async Task UpdateProductAsync(ExtendedProduct extendedProduct)
+        public async Task<AdmResult> UpdateProductAsync(ExtendedProduct extendedProduct)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "/Administrate/updatebook");
             request.Headers.Add("Authorization", "Bearer " + await _localStorageService.GetItemAsync<string>("token"));
@@ -74,10 +76,12 @@ namespace BookShop.Client.Services.AdministrateService
             using (var response = await _http.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadFromJsonAsync<AdmResult>();
+                return result!;
             }
         }
 
-        public async Task DeleteProductAsync(ExtendedProduct extendedProduct)
+        public async Task<AdmResult> DeleteProductAsync(ExtendedProduct extendedProduct)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "/Administrate/deletebook");
             request.Headers.Add("Authorization", "Bearer " + await _localStorageService.GetItemAsync<string>("token"));
@@ -86,6 +90,8 @@ namespace BookShop.Client.Services.AdministrateService
             using (var response = await _http.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadFromJsonAsync<AdmResult>();
+                return result!;
             }
         }
     }
