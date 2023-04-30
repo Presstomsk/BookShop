@@ -1,4 +1,8 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
 namespace BookShop.Shared
 {
     public class StringConsts
@@ -24,7 +28,7 @@ namespace BookShop.Shared
         public const string EMPTY_CATEGORY_NAME = "Введите название категории!";
         public const string EMPTY_ORIGINAL_PRICE = "Введите цену!";
         public const string EMPTY_EDITION_NAME = "Введите название версии!";
-        public const string EMPTY_PRICE = "Введите цену с учетом скидки!";       
+        public const string EMPTY_PRICE = "Введите цену с учетом скидки!";
         public const string ERROR_ADD_TO_DB = "Ошибка добавления книги в БД.";
         public const string ERROR_UPDATE_TO_DB = "Ошибка изменения книги в БД.";
         public const string ERROR_DELETE_TO_DB = "Ошибка удаления книги из БД.";

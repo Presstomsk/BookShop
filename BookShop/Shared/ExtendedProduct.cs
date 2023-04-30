@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
 
 namespace BookShop.Shared
 {
@@ -8,7 +12,7 @@ namespace BookShop.Shared
         public int EditionId { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public string Image { get; set; } = "https://via.placeholder.com/300x300";       
+        public string Image { get; set; } = "https://via.placeholder.com/300x300";
         public string? CategoryName { get; set; }
         public string? EditionName { get; set; }
         [Column(TypeName = "decimal(18,2)")]
