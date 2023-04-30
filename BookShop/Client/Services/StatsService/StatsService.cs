@@ -23,10 +23,10 @@ namespace BookShop.Client.Services.StatsService
             Console.WriteLine($"Visits: {visits}");
         }
 
-        public async Task IncrementVisitsAsync(string username)
+        public async Task IncrementVisitsAsync(string email)
         {
             var content = new StringContent(string.Empty);
-            content.Headers.Add("username", username);
+            content.Headers.Add("email", email);
             await _client.PostAsync("Stats", content);
         }
     }

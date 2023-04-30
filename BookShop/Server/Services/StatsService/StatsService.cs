@@ -18,16 +18,16 @@ namespace BookShop.Server.Services.StatsService
             return await _context.Stats.SumAsync(s => s.Visits);           
         }
 
-        public async Task IncrementVisitsAsync(string username)
+        public async Task IncrementVisitsAsync(string email)
         {
-            var stats = await _context.Stats.FirstOrDefaultAsync(s => s.Username.Equals(username));
+            var stats = await _context.Stats.FirstOrDefaultAsync(s => s.Email.Equals(email));
 
             if (stats == null)
             {
                 _context.Stats.Add(new Stats
                 {
                     Visits = 1,
-                    Username = username,
+                    Email = email,
                     LastVisit = DateTime.UtcNow,
                 });
             }

@@ -22,9 +22,9 @@ namespace BookShop.Server.Controllers
         }
 
         [HttpPost]
-        public async Task IncrementVisitsAsync([FromHeader]string username)
+        public async Task IncrementVisitsAsync([FromHeader]string email)
         {           
-            await _statsService.IncrementVisitsAsync(username);
+            await _statsService.IncrementVisitsAsync(email);
         }
     }
 }

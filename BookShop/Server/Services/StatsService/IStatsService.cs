@@ -3,6 +3,6 @@
     public interface IStatsService
     {
         Task<int> GetVisitsAsync();
-        Task IncrementVisitsAsync(string username);
+        Task IncrementVisitsAsync(string email);
     }
 }

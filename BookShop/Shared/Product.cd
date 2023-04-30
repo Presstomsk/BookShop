@@ -31,7 +31,7 @@
   <Class Name="BookShop.Shared.Stats">
     <Position X="0.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAQAAQAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAACAAAAQAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
       <FileName>Stats.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -63,6 +63,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAgAAAAAAAAAAIAABAAA=</HashCode>
       <FileName>LoginResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BookShop.Shared.AdmResult">
+    <Position X="7.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>AdmResult.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="BookShop.Shared.ILoginModel">
