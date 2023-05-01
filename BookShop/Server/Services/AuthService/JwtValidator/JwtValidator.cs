@@ -45,8 +45,9 @@ namespace BookShop.Server.Services.AuthService.JwtValidator
                         {
                             var identity = new ClaimsIdentity(new[]
                             {
-                            new Claim(ClaimTypes.Name, userName),
-                            new Claim(ClaimTypes.Role, userRole)
+                                new Claim(ClaimTypes.Name, userName),
+                                new Claim(ClaimTypes.Role, userRole),
+                                new Claim(ClaimTypes.Email, userEmail)
                             }, "authenticated type");
                             var claimsPrincipal = new ClaimsPrincipal(identity);
                             validatedToken = jwtSecurityToken;

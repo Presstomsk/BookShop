@@ -17,9 +17,9 @@ namespace BookShop.Server.Controllers
         }
 
         [HttpPost("checkout")]
-        public ActionResult CreateCheckoutSession(List<CartItem> cartItems)
+        public ActionResult CreateCheckoutSession(PaymentDto paymentDto)
         {
-            var session = _paymentService.CreateCheckoutSession(cartItems);
+            var session = _paymentService.CreateCheckoutSession(paymentDto);
             return Ok(session.Url);
         }
     }

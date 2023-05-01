@@ -59,7 +59,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="BookShop.Shared.LoginResult">
-    <Position X="4" Y="6.5" Width="1.5" />
+    <Position X="4" Y="6.5" Width="1.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAgAAAAAAAAAAIAABAAA=</HashCode>
       <FileName>LoginResult.cs</FileName>
@@ -85,6 +85,20 @@
     <TypeIdentifier>
       <HashCode>AEAACKAAAAAAABAoBAEAAQQCQQARAAAQAIEAJAgAICA=</HashCode>
       <FileName>StringConsts.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BookShop.Shared.PaymentDto">
+    <Position X="5.5" Y="6.5" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PaymentDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BookShop.Shared.Order">
+    <Position X="5.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEACAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Order.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="BookShop.Shared.ILoginModel">
@@ -113,6 +127,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAQ=</HashCode>
       <FileName>Role.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BookShop.Shared.OrderStatus">
+    <Position X="7.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAgAAgAAAAQAAAAgAAAAAAA=</HashCode>
+      <FileName>Order.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

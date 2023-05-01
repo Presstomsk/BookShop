@@ -9,7 +9,8 @@ namespace BookShop.Server.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Edition> Editions { get; set; }
         public DbSet<Stats> Stats { get; set; }
-        public DbSet<RegModel> regModels { get; set; }       
+        public DbSet<RegModel> regModels { get; set; } 
+        public DbSet<Order> Orders { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

@@ -85,9 +85,15 @@ namespace BookShop.Client.Services.CartService
             OnChange.Invoke();
         }
 
-        public async Task<string> CheckoutAsync()
+        public async Task<string> CheckoutAsync(string email)
         {
-            var result = await _httpClient.PostAsJsonAsync("Payment/checkout", await GetCartItemsAsync());
+            var paymentDto = new PaymentDto
+            {
+                Email = email,
+                CartItems = await GetCartItemsAsync()
+            };
+
+            var result = await _httpClient.PostAsJsonAsync("Payment/checkout", paymentDto);
             var url = await result.Content.ReadAsStringAsync();
             return url;
         }

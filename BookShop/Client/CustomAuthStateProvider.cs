@@ -58,7 +58,8 @@ namespace BookShop.Client
                         var identity = new ClaimsIdentity(new[]
                         {
                             new Claim(ClaimTypes.Name, userName),
-                            new Claim(ClaimTypes.Role, userRole)
+                            new Claim(ClaimTypes.Role, userRole),
+                            new Claim(ClaimTypes.Email, userEmail)
                         }, "authenticated type");
                         state = new AuthenticationState(new ClaimsPrincipal(identity));
 

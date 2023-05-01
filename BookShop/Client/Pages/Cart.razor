@@ -82,6 +82,8 @@ else
 @code {
     private List<CartItem> _cartItems = new List<CartItem>();
     private bool _isOrderPlaced = false;
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,8 +98,18 @@ else
 
     private async Task PlaceOrderAsync()
     {
-        var checkoutUrl = await CartService.CheckoutAsync();
-        NavigationManager.NavigateTo(checkoutUrl);       
-        await CartService.EmptyCartAsync();
+        if (AuthenticationState != null)
+        {
+            var authState = await AuthenticationState;
+            var user = authState?.User;
+
+            if (user?.Identity != null && user.Identity.IsAuthenticated)
+            {               
+                var email = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                var checkoutUrl = await CartService.CheckoutAsync(email);
+                NavigationManager.NavigateTo(checkoutUrl);
+                await CartService.EmptyCartAsync();
+            }
+        }
     }
 }
