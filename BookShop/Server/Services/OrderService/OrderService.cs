@@ -37,7 +37,7 @@ namespace BookShop.Server.Services.OrderService
             {
                 var order = await _dataContext.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
 
-                if (order?.Status != OrderStatus.Fail)
+                if (order != null && order.Status != OrderStatus.Fail)
                 {
                     order.Status = orderStatus;
                     await _dataContext.SaveChangesAsync();
