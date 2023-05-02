@@ -1,4 +1,4 @@
-﻿@page "/order-success/{orderId:guid}"
+﻿@page "/order-fail/{orderId:guid}"
 
 @inject IOrderService OrderService;
 @inject NavigationManager NavigationManager;
@@ -12,9 +12,9 @@
 </AuthorizeView>
 
 
-<h3>Спасибо!</h3>
+<h3>Ошибка!</h3>
 
-<span>Спасибо за ваш заказ! Будем рады Вас видеть снова! </span>
+<span>Что-то пошло не так!</span>
 
 @code{
     [Parameter]
@@ -22,6 +22,6 @@
 
     protected override async Task OnParametersSetAsync()
     {
-       await OrderService.UpdateOrderStatusByClientAsync(OrderId, OrderStatus.Success);        
+        await OrderService.UpdateOrderStatusByClientAsync(OrderId, OrderStatus.Success);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BookShop.Server.Data;
+using BookShop.Server.Services.OrderService;
 using BookShop.Shared;
 using Stripe;
 using Stripe.Checkout;
@@ -7,12 +8,12 @@ namespace BookShop.Server.Services.PaymentService
 {
     public class PaymentService : IPaymentService
     {
-        private readonly DataContext _dataContext;
+        private readonly IOrderService _orderService;
 
-        public PaymentService(DataContext dataContext)
+        public PaymentService(IOrderService orderService)
         {
             StripeConfiguration.ApiKey = "sk_test_51MyFbKI7kGA2rr8BymOjQawxfkaTP72x8YY5PVAx8cDCYL2q4IWcIlakfEqhxEa9Wx5gr8v8INYAnUn4mbnDjeCS002WaEzpHM";
-            _dataContext = dataContext;
+            _orderService = orderService;
         }
 
         public Session CreateCheckoutSession(PaymentDto paymentDto)
@@ -41,8 +42,8 @@ namespace BookShop.Server.Services.PaymentService
                 PaymentMethodTypes = new List<string> { "card" },
                 LineItems = lineItems,
                 Mode = "payment",
-                SuccessUrl = "https://localhost:7176/order-success",
-                CancelUrl = "https://localhost:7176/cart",
+                SuccessUrl = $"https://localhost:7176/order-success/{orderId}",
+                CancelUrl = $"https://localhost:7176/order-fail/{orderId}",
                 PaymentIntentData = new SessionPaymentIntentDataOptions
                 {
                     Description = orderId.ToString()
@@ -53,22 +54,8 @@ namespace BookShop.Server.Services.PaymentService
             
             var service = new SessionService();
             Session session = service.Create(options);
-            CreateOrder(orderId, paymentDto?.Email);
+            _orderService.CreateOrder(orderId, paymentDto?.Email);
             return session;     
-        }
-
-        private void CreateOrder(Guid orderId, string? email)
-        {
-            var order = new Order
-            {
-                Id = orderId,
-                Email = email,
-                Status = OrderStatus.Created
-            };
-
-            _dataContext.Add(order);
-            _dataContext.SaveChanges();
-        }
-    }
-   
+        }        
+    }   
 }

@@ -4,6 +4,7 @@ using BookShop.Server.Services.AuthService;
 using BookShop.Server.Services.AuthService.JwtValidator;
 using BookShop.Server.Services.CategoryService;
 using BookShop.Server.Services.EditionService;
+using BookShop.Server.Services.OrderService;
 using BookShop.Server.Services.PaymentService;
 using BookShop.Server.Services.ProductService;
 using BookShop.Server.Services.StatsService;
@@ -35,6 +36,7 @@ namespace BookShop
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IEditionService, EditionService>();
             builder.Services.AddScoped<IAdministrateService, AdministrateService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddAuthentication( o => { 
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;

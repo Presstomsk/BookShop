@@ -5,6 +5,7 @@ using BookShop.Client.Services.AuthService;
 using BookShop.Client.Services.CartService;
 using BookShop.Client.Services.CategoryService;
 using BookShop.Client.Services.EditionService;
+using BookShop.Client.Services.OrderService;
 using BookShop.Client.Services.ProductService;
 using BookShop.Client.Services.StatsService;
 using BookShop.Client.Services.Validators;
@@ -33,6 +34,7 @@ namespace BookShop.Client
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IAdministrateService, AdministrateService>();
             builder.Services.AddScoped<IEditionService, EditionService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IRegModel, RegModel>();
             builder.Services.AddScoped<ILoginModel, LoginModel>();
             builder.Services.AddScoped<IExtendedProduct, ExtendedProduct>();
