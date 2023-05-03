@@ -8,6 +8,7 @@ namespace BookShop.Shared
         public Guid Id { get; set; }
         public string? Email { get; set; }
         public OrderStatus Status { get; set; }
+        public string? TextOrderStatus { get; set; }
 
     }
     public enum OrderStatus

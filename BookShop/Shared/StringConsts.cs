@@ -32,5 +32,10 @@ namespace BookShop.Shared
         public const string ERROR_ADD_TO_DB = "Ошибка добавления книги в БД.";
         public const string ERROR_UPDATE_TO_DB = "Ошибка изменения книги в БД.";
         public const string ERROR_DELETE_TO_DB = "Ошибка удаления книги из БД.";
+        public const string SUCCESS = "Оплачен";
+        public const string FAIL = "Ошибка оплаты";
+        public const string CONFIRMED = "Подтвержден";
+        public const string SENT = "Отправлен";
+        public const string CREATED = "Создан";
     }
 }

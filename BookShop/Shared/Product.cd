@@ -59,7 +59,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="BookShop.Shared.LoginResult">
-    <Position X="4" Y="6.5" Width="1.25" />
+    <Position X="4" Y="7.25" Width="1.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAgAAAAAAAAAAIAABAAA=</HashCode>
       <FileName>LoginResult.cs</FileName>
@@ -83,19 +83,19 @@
   <Class Name="BookShop.Shared.StringConsts">
     <Position X="4" Y="0.5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AEAACKAAAAAAABAoBAEAAQQCQQARAAAQAIEAJAgAICA=</HashCode>
+      <HashCode>AEAACKCAAAAEABAoBAEgAQQCQQARAAAQAIEAJAgAICA=</HashCode>
       <FileName>StringConsts.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BookShop.Shared.PaymentDto">
-    <Position X="5.5" Y="6.5" Width="1.25" />
+    <Position X="5.5" Y="7.25" Width="1.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAgCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>PaymentDto.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BookShop.Shared.Order">
-    <Position X="5.5" Y="8" Width="1.5" />
+    <Position X="5.5" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAEACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Order.cs</FileName>

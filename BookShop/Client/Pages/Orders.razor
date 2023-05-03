@@ -1,0 +1,101 @@
+﻿@page "/orders"
+
+@inject NavigationManager NavigationManager;
+@inject IOrderService OrderService;
+
+<AuthorizeView Roles=@Role.Administrator.ToString()>
+    <Authorized>
+        <h3>Заказы</h3>
+        <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="true"
+                        FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="10"
+                        AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                        Data="@GridData" TItem="Order" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or"
+                        SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedOrder>
+            <Columns>               
+                <RadzenDataGridColumn TItem="Order" Property="Id" Title="Id" Frozen="true" Width="160px" TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn TItem="Order" Property="Email" Title="Заказчик" Width="160px" />
+                <RadzenDataGridColumn TItem="Order" Property="TextOrderStatus" Title="Статус" Width="160px" />
+            </Columns>
+        </RadzenDataGrid><br />
+        <p>
+            <RadzenRow Gap="1rem">                          
+                <RadzenColumn Size="12" SizeSM="3">
+                    <RadzenStack>
+                        <RadzenFormField Text="Статус" Variant="@variant">
+                            <RadzenDropDown 
+                                Data=@(selectedOrder != null ? values.GetValueOrDefault(selectedOrder.First().Status) : new List<string>()) 
+                                @bind-Value="@status" />
+                        </RadzenFormField>
+                    </RadzenStack>
+                </RadzenColumn>            
+                <RadzenButton Click=@(() => UpdateProductAsync()) Text="Изменить" Icon="edit" ButtonStyle="ButtonStyle.Primary" Disabled="@isDisabled" />
+                <RadzenButton Click="@ClearSelection" Text="Убрать выделение" ButtonStyle="ButtonStyle.Primary" />
+            </RadzenRow>
+        </p>
+    </Authorized>
+    <NotAuthorized>
+        @{
+            NavigationManager.NavigateTo("");
+        }
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    Variant variant = Variant.Outlined;
+    public List<Order> GridData { get; set; } = new List<Order>();
+    IList<Order>? selectedOrder;
+    string? status;
+    bool isDisabled = false;
+
+    Dictionary<OrderStatus, List<string>> values = new Dictionary<OrderStatus, List<string>> 
+    {
+        {OrderStatus.Success, new List<string> { StringConsts.CONFIRMED }},
+        {OrderStatus.Confirmed, new List<string> { StringConsts.SUCCESS, StringConsts.SENT }},
+        {OrderStatus.Sent, new List<string> { StringConsts.CONFIRMED }},
+        {OrderStatus.Fail, new List<string>()},
+    };  
+
+    Dictionary<string, OrderStatus> orderStatuses = new Dictionary<string, OrderStatus>
+        {           
+            {StringConsts.FAIL, OrderStatus.Fail},
+            {StringConsts.SUCCESS, OrderStatus.Success},
+            {StringConsts.CONFIRMED, OrderStatus.Confirmed},
+            {StringConsts.SENT, OrderStatus.Sent}
+        };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await OrderService.GetOrdersAsync();
+        if (result != null)
+        {
+            GridData = result;
+        }
+    }
+
+    void ClearSelection()
+    {
+        selectedOrder = null;
+    }
+
+    async Task UpdateProductAsync()
+    {
+        isDisabled = true;
+        var order = selectedOrder?.First();
+
+        if (order != null && !string.IsNullOrEmpty(status) && orderStatuses.TryGetValue(status, out OrderStatus orderStatus))
+        {           
+            await OrderService.UpdateOrderStatusByAdministratorAsync(order.Id, orderStatus);
+        }        
+
+        var result = await OrderService.GetOrdersAsync();
+
+        if (result != null)
+        {
+            GridData = result;
+        }
+
+        selectedOrder = null;
+        status = null;
+        isDisabled = false;        
+    }    
+}
