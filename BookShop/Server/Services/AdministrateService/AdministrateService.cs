@@ -39,9 +39,7 @@ namespace BookShop.Server.Services.AdministrateService
 
                 await _dataContext.AddAsync(productVariant);
                 await _dataContext.AddAsync(product);
-                await _dataContext.SaveChangesAsync();
-
-                throw new Exception();
+                await _dataContext.SaveChangesAsync();                
 
                 return new AdmResult
                 {
